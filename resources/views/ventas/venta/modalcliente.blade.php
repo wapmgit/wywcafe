@@ -1,0 +1,128 @@
+
+<div class="modal  modal-primary" aria-hidden="true"
+role="dialog" tabindex="-1" id="modalcliente" >
+	{!!Form::open(array('url'=>'/ventas/cliente','method'=>'POST','autocomplete'=>'off','id'=>'formulariocliente'))!!}
+            {{Form::token()}}
+
+	<div class="modal-dialog" >	
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" 
+				aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                </button>
+                <h3 class="modal-title">Nuevo Cliente </h3>
+			</div>
+			<div class="modal-body">
+
+ 	
+				<div class="row">
+	
+					<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+						 <div class="form-group">
+							<label for="nombre">Nombre</label>
+							<input type="text" name="cnombre" id="cnombre" onchange="conMayusculas(this)" required value="" class="form-control" placeholder="Nombre...">
+						</div>
+					</div>
+					<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+					<div class="form-group">
+					<label for="descripcion">Cedula</label>
+					<input type="text" name="ccedula" onchange="conMayusculas(this)"  id="vidcedula" class="form-control"  maxlength="15" placeholder="V000000">
+				</div>
+				</div>
+				<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+					  <div class="form-group">
+					<label for="descripcion">Codigo Pais</label>
+					<input type="text" name="ccodpais" value="+58" class="form-control" placeholder="+58">
+				</div>
+				</div>
+				<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+					  <div class="form-group">
+					<label for="descripcion">Telefono</label>
+					<input type="text" name="ctelefono" class="form-control" placeholder="4247163726">
+				</div>
+				</div>
+					   
+					 <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+					  <div class="form-group">
+				 <label for="tipo_cliente">Tipo Cliente</label>
+			  <select name="ctipo_cliente" class="form-control">
+							   <option value="1" selected>Contado</option>
+							   <option value="0">Credito</option>
+							  
+						   </select>
+			   </div>       </div>
+				<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+					 <div class="form-group">
+				 <label for="direccion">Direccion</label>
+				<input type="text" name="cdireccion" class="form-control" placeholder="Direccion...">
+			   </div>
+				</div>
+
+		
+					   	<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+           <div class="form-group">
+             <label for="tipo_precio">Aplicar Recargo</label><br>
+			<label for="precio1"> Si </label> <input name="recargo"  checked="checked" type="radio" value="1">
+		    <label for="precio1"> No </label> <input name="recargo"  type="radio" value="0" >
+           </div>
+		   </div>
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<div class="form-group">
+				<label>Dias Credito</label>
+			<input type="number" name="diascre" id="diascre" class="form-control"value="1" >
+           </div>
+           </div>
+			   
+					 <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
+					    <div class="form-group">
+            			             <label for="tipo_precio">Vendedor </label><br>
+            			<select name="idvendedor" class="form-control">
+            				@foreach ($vendedores as $cat)
+            				<option value="{{$cat->id_vendedor}}">{{$cat->nombre}}</option>
+            				@endforeach
+            			</select>
+            			
+            		</div>
+					</div>
+					 <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
+					  <div class="form-group">
+				 <label for="tipo_precio">Tipo de Precio </label><br>
+				<label for="precio1"> Precio 1 </label> <input name="cprecio" type="radio" value="1" checked="checked">
+			 <label for="precio2"> Precio 2 </label> <input name="cprecio" type="radio" value="2">
+			  <label for="precio2"> Costo </label> <input name="precio" type="radio" value="3">
+			   </div>     
+									  							
+				</div> 
+				 <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
+				<div class="form-group">
+            			             <label for="tipo_precio">Ruta </label><br>
+            			<select name="ruta" class="form-control" data-live-search="true">                                    
+                            <option value="1" selected>Seleccione...</option>
+                            @foreach ($rutas as $ru)
+                            <option value="{{$ru->idruta}}">{{$ru->nombre}}</option>  
+                            @endforeach                          
+                        </select>
+            			
+            		</div>
+	</div>
+			</div><div class="modal-footer">
+			 <div class="form-group">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				  <input name="_token" value="{{ csrf_token() }}" type="hidden" ></input>
+				<button type="button" id="Cenviar" class="btn btn-primary" >Confirmar</button>
+				</div>
+			</div>
+		</div>
+		</div>
+			
+
+	</div>
+		{!!Form::close()!!}		
+
+</div>
+
+
+  
+	
+   
