@@ -25,8 +25,7 @@ return $insertar_ceros = $recibo.$numero;
 		</div>
 		<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 		        <table id="detalles" width="90%">
-                      <tr>
-                     
+						<tr>                     
                           <th>Tostador</th>
                           <th>Kg Subidos</th>
                           <th>Materia Prima</th>
@@ -35,27 +34,32 @@ return $insertar_ceros = $recibo.$numero;
                           <td>{{$det->nombre}}</td>
                           <td>{{$det->kgmprima}} ({{$det->cochas}} cochas)</td>
                           <td>{{$det->psalida}}</td>
-						  </tr><tr>
+						  </tr>
+						  <tr>
                           <th>Responsable</th>
                           <th>Kg Bajados</th>
                           <th>Producto</th>
+						  </tr>
 						  <tr>
-						    <td>{{$det->responsable}}</td>
+						   <td>{{$det->responsable}}</td>
                           <td>{{$det->kgtostado}}</td>
-                          <td>{{$det->psalida}}</td></tr>
+                          <td>{{$det->psalida}}</td>
+						  </tr>
+						    <tr>
+                          <th>Kg Comision  {{$det->comision}}%</th>
+                          <th>Kg Maquina  {{$det->comima}}%</th>
+                          <th>Reduccion</th>
+						  </tr>
+						    <tr>
+						   <td>{{$det->kgcomi}}</td>
+                          <td>{{$det->kgcomima}}</td>
+                         <td>{{$det->reduccion}} %</td>
+						  </tr>
 						  <tr>
-                          <th>Fecha: {{$det->fecha}}</th>
-                          <th>Reduccion: {{$det->reduccion}}</th>
-                          <th>comision: {{$det->comision}}</th>
-              </tr><?php $acumcosto=0; $acumprecio=0; $acum=0; $monto=0;?>
-                      <tbody>
-          
-                       
-                        
-                        
-                          
-                        </tr>
-                  
+                          <th colspan="2">Fecha: {{$det->fecha}}</th>                       
+						</tr>
+						<?php $acumcosto=0; $acumprecio=0; $acum=0; $monto=0;?>
+                      <tbody>                  
                       </tbody>   
                   </table>
                  

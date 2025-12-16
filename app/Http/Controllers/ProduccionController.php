@@ -61,7 +61,7 @@ class ProduccionController extends Controller
     }
 		    public function savetostado (Request $request)
     {
-		dd($request);
+		//dd($request);
 		$user=Auth::user()->name;
 		$ide=Auth::user()->idempresa;
         $categoria=new Ptostado;

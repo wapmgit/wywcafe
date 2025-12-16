@@ -52,7 +52,7 @@
 		<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
 		   <div class="form-group">
             	<label for="descripcion">Kg Molidos</label>
-            	<input type="number" name="kgtostados" id="kgt" required class="form-control" placeholder="kg">
+            	<input type="number" name="kgtostados" id="kgt" step="0.1" required class="form-control" placeholder="kg">
             </div>
             </div>
 	<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
@@ -143,7 +143,7 @@ $(document).ready(function(){
 		if(parseFloat(kgs)>parseFloat(kgt)){
 		var ope=(100-((kgt*100)/kgs)).toFixed(2);		
 		$("#reduccion").val(ope);
-		$("#kgdif").val(kgs);		
+		$("#kgdif").val(kgt);		
 		}else{
 			alert('Kg Molidos no Pueden ser mayor a Kg Materia Prima');
 			$("#kgt").val(0);
@@ -164,6 +164,7 @@ $(document).ready(function(){
 			alert('Cantidad Empaquetada no puede ser Mayor a kg Molidos');
 			$('#cnt'+id).val(0);
 			$('#kg'+id).val(0);
+			$('#kgdif').val(kgdif);
 		}else{
 			$('#kg'+id).val(calc);
 			$('#kgemp').val(acume);

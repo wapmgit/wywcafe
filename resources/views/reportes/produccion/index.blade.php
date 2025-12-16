@@ -36,7 +36,7 @@ $cefe=0;?>
     <span ><?php echo date("d-m-Y",strtotime($searchText)); ?> al <?php echo date("d-m-Y",strtotime($searchText2)); ?> </span></p>
       <table class="table table-striped table-bordered table-condensed table-hover">
         <thead style="background-color: #E6E6E6">
-		  <th>Item</th>
+		  <th>#Doc.</th>
 		  <th>Fecha</th>
           <th>Tostador</th>
 		  <th>Cochas</th>
@@ -73,7 +73,7 @@ $cefe=0;?>
     <span > Produccion </span></p>
       <table class="table table-striped table-bordered table-condensed table-hover">
         <thead style="background-color: #E6E6E6">
-		  <th>Item</th>
+		  <th>#Doc.</th>
 		  <th>Fecha</th>
           <th>Encargado</th>
           <th>Kg Materia Prima</th> 

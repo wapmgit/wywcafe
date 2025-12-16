@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Depmaquina extends Model
 {
-protected $table='depmaqina';
+protected $table='depmaquina';
 
     protected $primaryKey='iddep';
 
