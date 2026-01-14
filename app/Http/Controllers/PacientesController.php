@@ -397,8 +397,8 @@ return view('pacientes.paciente.retencion',["ret"=>$ret,"empresa"=>$empresa]);
              $vend=trim($request->get('vendedor'));
              $ruta=trim($request->get('ruta'));
 			 $catclientes=DB::table('categoriaclientes')->get();
-			 $vendedores=DB::table('vendedores')->where('estatus','=',1)->get();
-			 $rutas=DB::table('rutas')->get();
+			 $vendedores=DB::table('vendedores')->where('idempresa','=',$ide)->where('estatus','=',1)->get();
+			 $rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
 			 $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
 				
 			if($ruta==0){ $condi=">";$que=0;} else { $condi="=";$que=$ruta;}

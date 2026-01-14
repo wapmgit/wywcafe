@@ -180,11 +180,13 @@ $recibonc=DB::table('mov_notasp as mov')-> where ('mov.iddoc','=',$id)-> where (
 	public function cuentaspagar(Request $request)
 	
 	{
+		$ide=Auth::user()->idempresa;
 		$rol=DB::table('roles')-> select('rcxp')->where('iduser','=',$request->user()->id)->first();
-	$empresa=DB::table('empresa')-> where('idempresa','=','1')->first();		
+	$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();		
 			$pacientes=DB::table('ingreso as i')
 			->join('proveedor as p','p.idproveedor','=','i.idproveedor')
 			->select('i.saldo as acumulado','i.tipo_comprobante','i.num_comprobante','i.fecha_hora','i.user','p.nombre','p.rif','p.telefono','p.direccion','p.contacto')
+			->where('i.idempresa','=',$ide)
 			->where('i.saldo','>',0)
 			->where('i.estatus','<>',"Anulada")
 			->orderby('p.nombre','ASC')
@@ -193,6 +195,7 @@ $recibonc=DB::table('mov_notasp as mov')-> where ('mov.iddoc','=',$id)-> where (
 			->join('proveedor as p','p.idproveedor','=','g.idpersona')
 			->select('g.documento','g.saldo','g.usuario','g.fecha','g.usuario','p.idproveedor','p.nombre','p.rif','p.telefono','p.direccion','p.contacto')
 			->groupby('p.idproveedor')
+			->where('g.idempresa','=',$ide)
 			->where('g.saldo','>',0)
 			->where('g.estatus','=',0)
 			->get(20);
@@ -233,7 +236,7 @@ $recibonc=DB::table('mov_notasp as mov')-> where ('mov.iddoc','=',$id)-> where (
 	
 					 return Redirect::to('reportes/pagos');
 		}
-				 public function pago(Request $request)
+public function pago(Request $request)
     {	
 		$fac=$request->get('factura');
 		$saldo=$request->get('saldo'); 

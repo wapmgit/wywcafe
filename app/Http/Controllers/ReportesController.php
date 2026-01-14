@@ -1223,17 +1223,19 @@ $rutasu="";
 		//	dd($ventas);
 			$valor=DB::table('articulo as dv')
 			-> select(DB::raw('sum(dv.stock*dv.costo) as val_costo'),DB::raw('sum(dv.stock*dv.precio1) as val_precio'))
+			->where('dv.idempresa','=',$ide)   
 			->first(); 
 				$q2=DB::table('notasadm as n')
 			->join('clientes as c','c.id_cliente','=','n.idcliente')
 			->select(DB::raw('sum(n.pendiente) as saldo'),DB::raw('sum(n.monto) as monto'),'c.id_cliente','c.nombre')
 			->where('n.tipo','=',1)->where('n.pendiente','>',0)
+			->where('n.idempresa','=',$ide)   
 			->groupby('n.idcliente')
 			->get();
 //dd($q2);			
-			$clientes=DB::table('clientes')->get();			
-			$proveedores=DB::table('proveedor')->get();			
-			$articulos=DB::table('articulo')->get();			
+			$clientes=DB::table('clientes')->where('idempresa','=',$ide)   ->get();			
+			$proveedores=DB::table('proveedor')->where('idempresa','=',$ide)   ->get();			
+			$articulos=DB::table('articulo')->where('idempresa','=',$ide)   ->get();			
         return view('reportes.resumen.index',["clientes"=>$clientes,"articulos"=>$articulos,"proveedores"=>$proveedores,"notas"=>$q2,"valor"=>$valor,"ventas"=>$ventas,"compras"=>$compras,"gastos"=>$gastos,"empresa"=>$empresa]);    
 
    }
@@ -1426,7 +1428,7 @@ public function ruta(Request $request)
         -> select('de.*','articulo.nombre','deposito.id_persona')
         ->get();
      $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
-     $rutas=DB::table('rutas')->get();
+     $rutas=DB::table('rutas')-> where('idempresa','=',$ide)->get();
 	 $vendedores=DB::table('vendedores')-> where('idempresa','=',$ide)->where('estatus','=',1)->get();
             $datos=DB::table('clientes')->select('id_cliente','nombre','cedula','licencia','telefono','direccion')
 			-> where('idempresa','=',$ide)           
@@ -1530,7 +1532,7 @@ return view('reportes.clientesectores.index',["notas"=>$notas,"municipios"=>$mun
 			$ide=Auth::user()->idempresa;
 			$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
 			$dias=$request->get('dias');
-			$rutas=DB::table('rutas')->get();
+			$rutas=DB::table('rutas')-> where('idempresa','=',$ide)->get();
 			if (($dias)==""){$dias=365; }
 			$corteHoy = date("Y-m-d"); 
            $query2 = date_create($corteHoy);  
@@ -1674,7 +1676,7 @@ return view('reportes.ventacobranza.index',["notas"=>$notas,"ingresosnc"=>$ingre
 	//dd($request);
 			$ide=Auth::user()->idempresa;
             $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
-			$vendedores=DB::table('vendedores')->where('estatus','=',1)->get();
+			$vendedores=DB::table('vendedores')->where('idempresa','=',$ide)->where('estatus','=',1)->get();
 				$corteHoy = date("Y-m-d");
 				$query=trim($request->get('searchText'));
 				$query2=trim($request->get('searchText2'));

@@ -42,7 +42,7 @@ class VentaController extends Controller
         if ($request)
         {
 			$rol=DB::table('roles')-> select('crearventa','anularventa')->where('iduser','=',$request->user()->id)->first();
-			   $empresa=DB::table('empresa')-> where('idempresa','=','1')->first();
+			   $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
             $query=trim($request->get('searchText'));
 			if ($request->get('busca')){
 				$busca=$request->get('busca');				

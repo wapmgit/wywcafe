@@ -215,7 +215,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/reportes/ventas"><i class="fa fa-circle-o"></i> Resumen de ventas</a></li>
-				<li><a href="/ventas/ventasf"><i class="fa fa-circle-o"></i> Correlativo Ventas FL</a></li>
+				<!--<li><a href="/ventas/ventasf"><i class="fa fa-circle-o"></i> Correlativo Ventas FL</a></li>-->
                 <li><a href="/reportes/corte"><i class="fa fa-circle-o"></i> Corte de Caja</a></li>
 				       <li><a href="/reportes/cobranza"><i class="fa fa-circle-o"></i> Detalle de Ingresos</a></li>
 				       <li><a href="/reportes/cobrar"><i class="fa fa-circle-o"></i>Cuentas por Cobrar</a></li>

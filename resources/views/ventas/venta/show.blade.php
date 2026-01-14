@@ -9,9 +9,9 @@
 	<table width="100%" BORDER="1">
 	<tr><td colspan="4"><small><b>NOMBRE Y APELLIDO O RAZON SOCIAL: </b> </small>{{$venta->nombre}}</td></tr>
 	<tr><td colspan="2"  width="50%"><small><b>DIRECCION: </b> </small>{{$venta->direccion}}</td><td  width="25%"><small><b>TELEFONO: </b> </small> {{$venta->telefono}}</td><td  width="25%"><small><b>CONTACTO: </b> </small> {{$venta->contacto}}</td></tr>
-	<tr><td><b> <small>N° RIF, N° CEDULA O PASAPORTE N°: </small> </b></br>{{$venta->cedula}}</td>
+	<tr><td><b> <small>N° RIF, N° CEDULA O PASAPORTE: </small> </b>{{$venta->cedula}}</td>
 	<td> <small><b>RUTA:</b>  </small></br>{{$venta->nruta}}</td>
-	<td> <b> <small>N° lICENCIA:  </small></b> </br>{{$venta->licencia}}</td><td><small>FORMA DE PAGO:</small></td>
+	<td> <b> <small>Vendedor:  </small></b> </br>{{$venta->vendedor}}</td><td><small><b>FORMA DE PAGO:</b>  {{$venta->estado}}</small></td>
 	</tr></table>
 	</div>
 </div>

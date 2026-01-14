@@ -44,7 +44,7 @@ $cefe=0;?>
      <h3 align="center">CORTE DE CAJA </h3> 
 	    </div>
 				<div class="col-lg-3 col-sm-3 col-md-3 col-xs-3">
-		<div align="center">   <img src="{{asset('dist/img/logoempresa.jpg')}}" width="40%" height="80%" title="NKS"></div>
+		<div align="center">   <img src="{{ asset('dist/img/'.$empresa->logo)}}" width="40%" height="80%" title="NKS"></div>
 		</div>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <span ><?php echo date("d-m-Y",strtotime($searchText)); ?> al <?php echo date("d-m-Y",strtotime($searchText2)); ?>  </span>

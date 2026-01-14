@@ -129,7 +129,7 @@
 		  <table width="100%"><tr><td>
 	<label> Total Ingresos: <?php echo number_format(($acumind+$acumcobro+$acumvc), 2,',','.'). " $ "; ?></label></td>
 	<td><label> Total Cxc Acumulada(fin periodo de Consulta): <?php echo number_format(($cxcante->saldoc+$cxcperiodo->saldoc), 2,',','.'). " $ "; ?></label></td>
-	<td><label> Total Cxc por N/D Acumulada(fin periodo de Consulta): <?php echo number_format(($notas->deuda), 2,',','.'). " $ "; ?></label></td></tr>
+	<td><label> Total Cxc por N/D Acumulada(fin periodo de Consulta): <?php  if ($notas <> NULL){  echo number_format(($notas->deuda), 2,',','.'). " $ "; } else { echo "0,00";} ?></label></td></tr>
 </table> 
  </div>
   </div>

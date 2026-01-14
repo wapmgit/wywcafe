@@ -8,6 +8,6 @@
 	    </div>
 		<div class="col-lg-4 col-sm-4 col-md-4 col-xs-4">
 				<div align="center">  
-				<img class="img-thumbnail" src="{{asset('dist/img/logoempresa.jpg')}}" width="60%" height="90%" title="NKS"></div>
+				<img class="img-thumbnail" src="{{ asset('dist/img/'.$empresa->logo)}}" width="60%" height="90%" title="NKS"></div>
 	    </div>
 </div>
