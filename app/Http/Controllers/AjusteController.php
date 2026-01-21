@@ -13,6 +13,7 @@ use DB;
 use sisventas\Articulo;
 use sisventas\Ajuste;
 use sisventas\Kardex;
+use sisventas\Existencia;
 use sisventas\Datacsv;
 use sisventas\DetalleAjuste;
 use Auth;
@@ -50,9 +51,14 @@ class AjusteController extends Controller
 		$ide=Auth::user()->idempresa;
 		$categorias=DB::table('categoria')->where('idempresa','=',$ide)	->where('condicion','=','1')->get();
          $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
+		 	$dep=DB::table('depvendedor')->select('id_deposito')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first();
         $articulos =DB::table('articulo as art')
-        -> select(DB::raw('CONCAT(art.codigo,"-",art.nombre," - ",art.stock," - ",art.costo,"-",art.iva) as articulo'),'art.idarticulo','art.stock','art.costo')
-        ->where('art.idempresa','=',$ide)	
+		->join('existencia as ex','ex.idarticulo','=','art.idarticulo')
+        -> select(DB::raw('CONCAT(art.codigo,"-",art.nombre," - ",ex.existencia," - ",art.costo,"-",art.iva) as articulo'),'art.idarticulo','ex.existencia as stock','art.costo')
+        ->where('ex.id_almacen','=',$dep->id_deposito)	
 		-> where('art.estado','=','Activo')
         -> get();
         return view("compras.ajuste.create",["articulos"=>$articulos,"empresa"=>$empresa,"categorias"=>$categorias]);
@@ -61,7 +67,10 @@ class AjusteController extends Controller
 	//	dd($request);
 $user=Auth::user()->name;
 $ide=Auth::user()->idempresa;
-
+$dep=DB::table('depvendedor')->select('id_deposito')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first();
 try{
 	$contador=DB::table('ajuste')->select(DB::raw('count(idajuste) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idajuste','desc')->first();
    if ($contador==NULL){$numero=0;}else{$numero=$contador->idventa;}
@@ -110,7 +119,17 @@ try{
 			$articulo->stock=($articulo->stock-$cantidad[$cont]);
 		}
 	$articulo->update();   
-		
+		 $deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$idarticulo[$cont])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					if($tipom=1){
+					$exis->existencia=($exis->existencia+$cantidad[$cont]); }else{
+					$exis->existencia=($exis->existencia-$cantidad[$cont]);	
+					}
+					$exis->update();
  		$kar=new Kardex;
 		$kar->fecha=$mytime->toDateTimeString();
 		$kar->documento="AJUS-".$ajuste->idajuste;

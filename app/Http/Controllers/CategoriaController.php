@@ -26,7 +26,7 @@ class CategoriaController extends Controller
 		 $ide=Auth::user()->idempresa;
 		 if ($nivel=="L")
 		 {
-			 $monedas=DB::table('monedas')->get();
+		$monedas=DB::table('monedas')->get();
 		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.nombre as nombrev')
 		-> where('clientes.idempresa','=',$ide)
 		-> where('clientes.status','=','A')
@@ -101,21 +101,23 @@ class CategoriaController extends Controller
 		
         return view('almacen.categoria.grafico',["vene"=>$vene,"vfeb"=>$vfeb,"vmar"=>$vmar,"vabr"=>$vabr,"vmay"=>$vmay,"vjun"=>$vjun,"vjul"=>$vjul,"vago"=>$vago,"cene"=>$cene,"cfeb"=>$cfeb,"cmar"=>$cmar,"cmay"=>$cmay,"cabr"=>$cabr,"cjun"=>$cjun,"cjul"=>$cjul,"cago"=>$cago,"csep"=>$csep,"vsep"=>$vsep,"voct"=>$voct,"coct"=>$coct,"vnov"=>$vnov,"cnov"=>$cnov,"vdic"=>$vdic,"cdic"=>$cdic,"empresa"=>$empresa,"clientes"=>$clientes,"proveedor"=>$proveedor,"articulo"=>$articulos,"vendedores"=>$vendedores]);
     } else {
+		$idvende=Auth::user()->vendedor;
+		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
 		$monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
-		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')-> where('clientes.idempresa','=',$ide)-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
+		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')-> where('clientes.idempresa','=',$ide)-> where('clientes.vendedor','=',$idvende)-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
          $contador=DB::table('venta')->select('idventa')->limit('1')->orderby('idventa','desc')->get();
-		 $vendedor=DB::table('vendedores')-> where('idempresa','=',$ide)->where('estatus','=',1)->get(); 
+		 $vendedores=DB::table('vendedores')-> where('idempresa','=',$ide)->where('id_vendedor','=',$idvende)->where('estatus','=',1)->get(); 
 			//dd($contador);
-         $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor')
-		-> where('art.idempresa','=',$ide)       
-	   -> where('art.estado','=','Activo')
+       $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
+        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
+        ->where('art.idempresa','=',$ide)
+		-> where('art.estado','=','Activo')
         -> where ('art.stock','>','0')
         ->groupby('articulo','art.idarticulo')
         -> get();
         //dd($articulos);
 		if ($contador==""){$contador=0;}
-		return view("ventas.venta.create",["personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
+		return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
     }
     }
     public function store (CategoriaFormRequest $request)

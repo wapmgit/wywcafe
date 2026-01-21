@@ -10,6 +10,7 @@ use sisventas\Venta;
 use sisventas\Ventaf;
 use sisventas\Relacionnc;
 use sisventas\devolucion;
+use sisventas\Existencia;
 use sisventas\Detalledevolucion;
 use sisventas\Detalleimportar;
 use sisventas\Articulo;
@@ -64,11 +65,14 @@ class VentaController extends Controller
         }
     } 
     public function create(Request $request){
+		
 		$ide=Auth::user()->idempresa;
+		$nivel=Auth::user()->nivel;
+		  $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
+		if($nivel=="A"){
 		$monedas=DB::table('monedas')->where('idempresa','=',$ide)->get();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
-		$vendedor=DB::table('vendedores')->where('idempresa','=',$ide)->where('estatus','=',1)->get();
-        $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
+		$vendedor=DB::table('vendedores')->where('idempresa','=',$ide)->where('estatus','=',1)->get();      
         $personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')
 		->where('clientes.idempresa','=',$ide)
 		-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
@@ -83,6 +87,24 @@ class VentaController extends Controller
         -> get();
 		//dd($articulos);
      if ($contador==""){$contador=0;}
+		}else{
+			$idvende=Auth::user()->vendedor;
+		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
+		$monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
+		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')-> where('clientes.idempresa','=',$ide)-> where('clientes.vendedor','=',$idvende)-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
+         $contador=DB::table('venta')->select('idventa')->limit('1')->orderby('idventa','desc')->get();
+		 $vendedor=DB::table('vendedores')-> where('idempresa','=',$ide)->where('id_vendedor','=',$idvende)->where('estatus','=',1)->get(); 
+			//dd($contador);
+       $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
+        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
+        ->where('art.idempresa','=',$ide)
+		-> where('art.estado','=','Activo')
+        -> where ('art.stock','>','0')
+        ->groupby('articulo','art.idarticulo')
+        -> get();
+        //dd($articulos);
+		if ($contador==""){$contador=0;}
+		}
       return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
     }
     public function store(ventaFormRequest $request){
@@ -134,6 +156,10 @@ class VentaController extends Controller
 	$venta->user=$user;	
    $venta-> save();
   // dd($venta);
+  $dep=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idvendedor','=',$request->get('nvendedor'))
+            ->where('idempresa','=',$ide)		
+            ->first();
 		if(($request->get('tdeuda')==0)and($request->get('convertir')=="on")){
 			//inserto la forma libre
 			   $contador=DB::table('ventaf')->select('idventa')->limit('1')->orderby('idventa','desc')->first();
@@ -281,6 +307,14 @@ class VentaController extends Controller
 		$kar->tipo=2; 
 		$kar->user=$user;
 		 $kar->save();  
+			 $deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$idarticulo[$cont])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$cantidad[$cont]);
+					$exis->update();
                       //actualizo stock   
 		//cimision 
 					
@@ -598,6 +632,8 @@ public function pnota(Request $request)
 	}
 public function show(Request $request,$id){
 			$ide=Auth::user()->idempresa;
+			$nivel=Auth::user()->nivel;
+			if($nivel=="A"){ $ruta="/ventas/venta";}else{ $ruta="/ventas/ventacaja"; }
 			$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
 			$venta=DB::table('venta as v')
             -> join ('clientes as p','v.idcliente','=','p.id_cliente')
@@ -651,7 +687,7 @@ public function show(Request $request,$id){
 		   ->select('debe')
             ->first();	
 			//dd($vacios);
-            return view("ventas.venta.show",["vacios"=>$vacios,"notasnc"=>$notasnc,"notasnd"=>$notasnd,"cxc"=>$cxc,"venta"=>$venta,"recibos"=>$recibo,"recibonc"=>$recibonc,"empresa"=>$empresa,"detalles"=>$detalles]);
+            return view("ventas.venta.show",["ruta"=>$ruta,"vacios"=>$vacios,"notasnc"=>$notasnc,"notasnd"=>$notasnd,"cxc"=>$cxc,"venta"=>$venta,"recibos"=>$recibo,"recibonc"=>$recibonc,"empresa"=>$empresa,"detalles"=>$detalles]);
 }
 public function ver(Request $request, $id){
 	$ide=Auth::user()->idempresa;
@@ -745,6 +781,7 @@ public function devolucion(){
     }
 	 public function ventacaja(Request $request)
     {
+		
 		$ide=Auth::user()->idempresa;
 		$monedas=DB::table('monedas')->where('idempresa','=',$ide)->get();
 	

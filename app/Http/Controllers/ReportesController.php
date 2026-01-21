@@ -13,6 +13,7 @@ use sisventas\Articulo;
 use sisventas\Ingreso;
 use sisventas\Recibo;
 use sisventas\Movbanco;
+use sisventas\Existencia;
 use sisventas\Mov_notas;
 use sisventas\Notasadm;
 use sisventas\Kardex;
@@ -286,15 +287,20 @@ class ReportesController extends Controller
     }
     public function store(DevolucionFormRequest $request){
 //dd($request);
+	$ide=Auth::user()->idempresa;
 	$user=Auth::user()->name;
     $devolucion=new Devolucion;
+    $devolucion->idempresa=$ide;
     $devolucion->idventa=$request->get('idventa');
     $devolucion->comprobante=$request->get('comprobante');
-    $mytime=Carbon::now('America/Lima');
+    $mytime=Carbon::now('America/Caracas');
     $devolucion->fecha_hora=$mytime->toDateTimeString();
     $devolucion->user=$user;
 	$devolucion-> save();
-
+	$dep=DB::table('venta')
+	->join('depvendedor','depvendedor.idvendedor','=','venta.idvendedor')->select('depvendedor.id_deposito')
+            ->where('venta.idventa','=',$request->get('idventa'))		
+            ->first();
     $venta=Venta::findOrFail( $devolucion->idventa);
     $venta->devolu='1';
 	$venta->saldo='0';
@@ -302,6 +308,7 @@ class ReportesController extends Controller
 				if($request->get('nc')){
 		$paciente=new Notasadm;
         $paciente->tipo=2;
+        $paciente->idempresa=$ide;
         $paciente->idcliente=$venta->idcliente;
         $paciente->descripcion="N/C por Devolucion";
         $paciente->referencia="FAC ".$venta->idventa;
@@ -332,6 +339,14 @@ class ReportesController extends Controller
             $articulo=Articulo::findOrFail($idarticulo[$cont]);
             $articulo->stock=($articulo->stock+$cantidad[$cont]);
 			$articulo->update();
+			$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$idarticulo[$cont])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia+$cantidad[$cont]);
+					$exis->update();
 		$kar=new Kardex;
 		$kar->fecha=$mytime->toDateTimeString();
 		$kar->documento="DEV:V-".$request->get('comprobante');

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use sisventas\Http\Requests\CategoriaFormRequest;
 use sisventas\Http\Requests\VendedoresFormRequest;
 use sisventas\Pacientes;
+use sisventas\Depvendedor;
 use DB;
 use Auth;
 
@@ -39,11 +40,14 @@ class VendedoresController extends Controller
 	}
 	public function create()
 	{
-		return view("vendedor.vendedor.create");
+		$deposito=DB::table('depvendedor')-> where('idvendedor','=','0')->get();
+		return view("vendedor.vendedor.create",["deposito"=>$deposito]);
 	}
 	public function edit($historia)
-	{
-		return view("vendedor.vendedor.edit",["vendedores"=>Vendedores::findOrFail($historia)]);
+	{	
+		$vendedores=Vendedores::findOrFail($historia);
+		$deposito=DB::table('depvendedor')->where('idempresa','=',$vendedores->idempresa)->get();
+		return view("vendedor.vendedor.edit",["vendedores"=>$vendedores,"deposito"=>$deposito]);
 	}
 	public function update(VendedoresFormRequest $request, $historia)
 	{
@@ -56,6 +60,10 @@ class VendedoresController extends Controller
     	$paciente->direccion=$request->get('direccion');
     	$paciente->comision=$request->get('comision');
         $paciente->update();
+		
+		$dep=Depvendedor::findOrFail($request->get('deposito'));
+		 $dep->idvendedor=$paciente->id_vendedor;
+		 $dep->update();
         return Redirect::to('vendedor/vendedor');
 	}
 	
@@ -70,6 +78,9 @@ class VendedoresController extends Controller
         $paciente->direccion=$request->get('direccion');
         $paciente->comision=$request->get('comision');
         $paciente->save();
+		$dep=Depvendedor::findOrFail($request->get('deposito'));
+		 $dep->idvendedor=$paciente->id_vendedor;
+		 $dep->update();
         return Redirect::to('vendedor/vendedor');
 
     }

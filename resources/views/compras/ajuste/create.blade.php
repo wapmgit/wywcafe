@@ -48,10 +48,10 @@ if (dias_transcurridos($fecha_a,$fserver) < 0){
                     <label for="responsable">Responsable</label>
                     <input type="text"  name="responsable" id="responsable" value="{{old('responsable')}}" class="form-control" placeholder="Responsable">
                 </div>
-            </div>
+            </div><!--
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">   <label for="responsable">Importar Archivo</label></br>
 		<a href="" data-target="#modalload" data-toggle="modal"><span class="label label-warning">Csv <i class="fa fa-fw  fa-pencil"> </i></span></a>
-        </div>	
+        </div>	-->
             </div>
             <div clas ="row">
                 <div class="panel panel-primary">

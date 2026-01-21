@@ -48,7 +48,7 @@ role="dialog" tabindex="-1" id="modaldevolucion">
 <script> 
 
  $('#senddevolu').on("click",function(){ 
-
+document.getElementById('senddevolu').style.display="none";
  document.getElementById('formulario').submit(); })
 
 	</script>

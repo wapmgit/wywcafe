@@ -37,6 +37,15 @@
             	<label for="nombre">Comision</label>
             	<input type="number" min="0" name="comision" value="{{$vendedores->comision}}" class="form-control" placeholder="%">
             </div>
+			 <div class="form-group">
+				<label for="tipo_precio">Deposito </label><br>
+            			<select name="deposito" class="form-control" >						
+            				@foreach ($deposito as $cat)
+            				<option value="{{$cat->id_deposito}}" <?php if($vendedores->id_vendedor==$cat->idvendedor){ echo "selected";}?>>{{$cat->nombre}}</option>
+            				@endforeach
+            			</select>
+            			
+            </div>
             <div class="form-group">
 					<button class="btn btn-primary" type="button" id="btnguardar">Guardar</button>
             	       <button class="btn btn-danger" type="reset" id="btncancelar">Cancelar</button>

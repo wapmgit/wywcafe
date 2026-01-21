@@ -8,6 +8,7 @@ use sisventas\Http\Requests;
 use sisventas\Ptostado;
 use sisventas\Pmolida;
 use sisventas\Produccion;
+use sisventas\Existencia;
 use sisventas\Tostador;
 use sisventas\Depmaquina;
 use sisventas\DetalleProduccion;
@@ -57,6 +58,7 @@ class ProduccionController extends Controller
             ->where ('a.nivelp','=',0)
             ->orderBy('a.nombre','asc')
             ->get();
+			//dd($materia);
         return view("produccion.tostado.create",["materia"=>$materia,"tostador"=>$tostador,"producto"=>$producto]);
     }
 		    public function savetostado (Request $request)
@@ -81,6 +83,10 @@ class ProduccionController extends Controller
 		$mytime=Carbon::now('America/Caracas');
         $categoria->fecha=$mytime->toDateTimeString();
         $categoria->save();
+		$depo=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first(); 
 		//reg tostador
 		$tost=Tostador::findOrFail($request->get('tostador'));
 		$tost->kg=$tost->kg+$request->get('kgcomi');
@@ -105,6 +111,14 @@ class ProduccionController extends Controller
 		$kar->tipo=2; 
 		$kar->user=$user;
 		$kar->save();
+			$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$request->get('mprima'))		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$request->get('kgsubidos'));
+					$exis->update();
 		//entra
 		$articulo=Articulo::findOrFail($request->get('producto'));
 		$stock=$articulo->stock;
@@ -120,6 +134,14 @@ class ProduccionController extends Controller
 		$kar->tipo=1; 
 		$kar->user=$user;
 		$kar->save();
+			$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$request->get('producto'))		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia+$request->get('kgtostados'));
+					$exis->update();
         return Redirect::to('produccion/tostado');
 
     }
@@ -144,6 +166,11 @@ class ProduccionController extends Controller
 		$mytime=Carbon::now('America/Caracas');
         $categoria->fecha=$mytime->toDateTimeString();
         $categoria->save();
+		
+		$depo=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first();
 		
 		   $idp=$request->get('idproduccion');
            $produ=$request->get('produccion');
@@ -171,6 +198,16 @@ class ProduccionController extends Controller
 			$kar->tipo=1; 
 			$kar->user=$user;
 			if($produ[$contp]>0){$kar->save();}
+			
+			 $deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$idp[$contp])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia+$produ[$contp]);
+						if($produ[$contp]>0){$exis->update();}
+				
 				 $contp=$contp+1;
 			  }  
 		//sale
@@ -190,6 +227,14 @@ class ProduccionController extends Controller
 		$kar->tipo=2; 
 		$kar->user=$user;
 		$kar->save();
+			$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$request->get('mprima'))		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$request->get('kgsubidos'));
+					$exis->update();
         return Redirect::to('produccion/molida');
 
     }

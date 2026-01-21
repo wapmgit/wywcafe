@@ -3,15 +3,6 @@
 @include('ventas.venta.empresa')
 <?php $acum=0; 
 $ceros=5;  $acumnc=0;
-function add_ceros($numero,$ceros) {
-  $numero=$numero;
-$digitos=strlen($numero);
-  $recibo=" ";
-  for ($i=0;$i<8-$digitos;$i++){
-    $recibo=$recibo."0";
-  }
-return $insertar_ceros = $recibo.$numero;
-};
 ?>
 <div class="row">
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -20,7 +11,7 @@ return $insertar_ceros = $recibo.$numero;
 	<tr><td colspan="2"  width="50%"><small><b>DIRECCION: </b> </small>{{$venta->direccion}}</td><td  width="25%"><small><b>TELEFONO: </b> </small> {{$venta->telefono}}</td><td  width="25%"><small><b>CONTACTO: </b> </small> {{$venta->contacto}}</td></tr>
 	<tr><td><b> <small>N° RIF, N° CEDULA O PASAPORTE N°: </small> </b></br>{{$venta->cedula}}</td>
 	<td> <small><b>RUTA:</b>  </small></br>{{$venta->ruta}}</td>
-	<td> <b> <small>N° lICENCIA:  </small></b> </br>{{$venta->licencia}}</td><td><small>FORMA DE PAGO:</small></td>
+	<td> <b> <small>Vendedor:  </small></b> </br>{{$venta->vendedor}}</td><td><small>FORMA DE PAGO:</small></td>
 	</tr></table>
 	</div>
 </div>

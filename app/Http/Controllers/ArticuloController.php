@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use sisventas\Http\Requests;
 use sisventas\Articulo;
+use sisventas\Existencia;
 use sisventas\Vendedores;
 use sisventas\DetalleIngreso;
 use sisventas\ReportesController;
@@ -30,22 +31,27 @@ class ArticuloController extends Controller
 			$rol=DB::table('roles')-> select('newarticulo','editarticulo','web')->where('iduser','=',$request->user()->id)->first();
            $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
             $query=trim($request->get('searchText'));
-            $articulos=DB::table('articulo as a')
+              $articulos=DB::table('articulo as a')
 			-> join('categoria as c','a.idcategoria','=','c.idcategoria')
 			-> select ('a.idarticulo','a.nombre','a.precio1','a.codigo','a.stock','c.nombre as categoria','a.descripcion','a.imagen','a.estado')
-			->where('a.idempresa','=',$ide)		  
+             ->where('a.idempresa','=',$ide)
 			->where('a.nombre','LIKE','%'.$query.'%')
-            ->where('a.estado','=','Activo')
+            ->where('a.estado','=','Activo')         
             ->orderBy('a.idarticulo','desc')
+			->groupBY('a.idarticulo')
             ->paginate(20);
-			//dd($articulos);
-            return view('almacen.articulo.index',["rol"=>$rol,"articulos"=>$articulos,"empresa"=>$empresa,"searchText"=>$query]);
+			$existencia=DB::table('existencia as e')
+			->join('depvendedor as de','de.id_deposito','=','e.id_almacen')
+			 ->where('e.idempresa','=',$ide)
+			->get();
+			//dd($existencia);
+            return view('almacen.articulo.index',["rol"=>$rol,"articulos"=>$articulos,"empresa"=>$empresa,"existencia"=>$existencia,"searchText"=>$query]);
         }
     }
     public function create(Request $request)
     {
 		$ide=Auth::user()->idempresa;
-    	$categorias=DB::table('categoria')->where('idempresa','=',$ide)->where('condicion','=',$ide)->get();
+    	$categorias=DB::table('categoria')->where('idempresa','=',$ide)->where('condicion','=',1)->get();
 	$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
         return view("almacen.articulo.create",["categorias"=>$categorias,"empresa"=>$empresa]);
     }
@@ -61,7 +67,7 @@ class ArticuloController extends Controller
 	
 		$ide=Auth::user()->idempresa;
         $validar=$request->get('codigo');
-                try{
+          try{
     DB::beginTransaction();
        // $articulos=Articulo::findOrFail($request->get('codigo'));
 		$articulo=new Articulo;
@@ -81,7 +87,7 @@ class ArticuloController extends Controller
         $articulo->vacio=$request->get('vacio');
         $articulo->volumen=$request->get('volumen');
         $articulo->grados=$request->get('grados');
-		$articulo->peso=$request->get('peso');
+		$articulo->pesogr=$request->get('peso');
 		$articulo->sevende=$request->get('sevende');
 		$articulo->clase=$request->get('clase');
         $articulo->origen=$request->get('origen');
@@ -100,8 +106,17 @@ class ArticuloController extends Controller
         }
 
         $articulo->save();
-
-               DB::commit();
+		    $deposito=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first();
+				$exis=new Existencia();
+				  $exis->idempresa=$ide;
+				  $exis->id_almacen=$deposito->id_deposito;
+				  $exis->idarticulo=$articulo->idarticulo;
+				  $exis->existencia=0;
+				  $exis->save(); 
+              DB::commit();
 }
 catch(\Exception $e)
 {
@@ -176,7 +191,7 @@ catch(\Exception $e)
         $articulo->iva=$request->get('impuesto');
 		$articulo->fraccion=$request->get('fraccion');
         $articulo->comi=$request->get('comi');
-		$articulo->peso=$request->get('peso');
+		$articulo->pesogr=$request->get('peso');
 		$articulo->sevende=$request->get('sevende');
 		$articulo->pcomision=$request->get('porcentaje');
 		$articulo->vacio=$request->get('vacio');

@@ -92,6 +92,7 @@ $idv=0;
                     <div class="form-group">
 		<input type="hidden" value="{{$empresa->tc}}" id="valortasa" name="tc" class="form-control">
 				 <input type="hidden" value="" id="nvendedor" name="nvendedor" class="form-control">
+				 <input type="hidden" value="" id="almacen" name="almacen" class="form-control">
 		 <input type="hidden" value="{{$empresa->peso}}" id="valortasap" name="peso" class="form-control">
 		 
                     	<label for="cliente">Cliente <a href="" data-target="#modalcliente" data-toggle="modal"><span class="label label-success">Nuevo <i class="fa fa-fw  fa-user "> </i></span></a></label>
@@ -331,6 +332,9 @@ var count =document.getElementById('id_cliente').options.length;
 		$("#id_cliente")
 	.append( '<option value="0" selected>Seleccione...</option>')
 	.selectpicker('refresh');
+	$("#pidarticulo")
+	.empty()
+	.selectpicker('refresh');
 	}
 	 document.getElementById('bt_pago').style.display="none";
     $('#bt_add').click(function(){
@@ -556,7 +560,10 @@ var count =document.getElementById('id_cliente').options.length;
 	  if ($("#tipocli").val()==1){		
 		document.getElementById('procesa').style.display="none"; }
 		else{document.getElementById('procesa').style.display=""; }
-		
+	$("#pidarticulo")
+  .empty() 
+  .append('<option>Seleccione..</option>')
+  .selectpicker('refresh'); 
 			var form3= $('#form');
 			var url3 = '/clientes/cliente/nc';
 			var data3 = form3.serialize();
@@ -566,7 +573,14 @@ var count =document.getElementById('id_cliente').options.length;
 				rows=resultado3[0].length; 			
 				rowscxc=resultado3[1].length; 
 				rowscredito=resultado3[2].length;
-				
+			   var parada=resultado3[3].length; 
+		  $("#almacen").val(resultado3[3][0].id_almacen); 			
+		if(parada>0){ for(j=0;j<=parada;j++){ 
+	$("#pidarticulo")
+	.append( 
+    '<option value="'+resultado3[3][j].idarticulo+'_'+resultado3[3][j].stock+'_'+resultado3[3][j].precio_promedio+'_'+resultado3[3][j].precio2+'_'+resultado3[3][j].costo+'_'+resultado3[3][j].iva+'_'+resultado3[3][j].licor+'_'+resultado3[3][j].fraccion+'">'+resultado3[3][j].articulo+'</option>' )
+	.selectpicker('refresh');
+        } }
 			//	alert(rowscxc);
 					if (rows > 0){
 						var montncr=resultado3[0][0].saldo;

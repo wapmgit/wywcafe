@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 use sisventas\Http\Requests\ventaFormRequest;
 use DB;
 use sisventas\Pacientes;
+use sisventas\Existencia;
 use sisventas\DetalleVenta;
 use sisventas\Detallepedido;
 use Carbon\Carbon;
@@ -319,8 +320,13 @@ catch(\Exception $e)
 return Redirect::to('pedido/pedido/'.$detalleventa->idventa);
 }
 	public function devolucionfac(Request $request){
+			$ide=Auth::user()->idempresa;
 //dd($request);
-	$modo=DB::table('empresa')->select('modop')-> where('idempresa','=','1')->first();
+	$modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
+	$dep=DB::table('venta')
+	->join('depvendedor','depvendedor.idvendedor','=','venta.idvendedor')->select('depvendedor.id_deposito')
+            ->where('venta.idventa','=',$request->get('idventa'))		
+            ->first();
 	//    try{
 //	DB::beginTransaction();
 	$user=Auth::user()->name;
@@ -413,13 +419,25 @@ return Redirect::to('pedido/pedido/'.$detalleventa->idventa);
 	$detalleventa->cantidad=$request -> get('cantidad');
 	$detalleventa->precio_venta=$request -> get('precio');
 	$detalleventa->update();
-	
+	$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$idar)		
+            ->first();
+					
 		$articulo=Articulo::findOrFail($idar);
 		$stock=$articulo->stock;
 		if($tipo == 1){
-		$articulo->stock=($articulo->stock+$nc);}
-		else{
-		$articulo->stock=($articulo->stock-$nc);}
+		$articulo->stock=($articulo->stock+$nc);
+			$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia+$nc);
+					$exis->update();
+					}else{
+		$articulo->stock=($articulo->stock-$nc);
+		$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$nc);
+					$exis->update();
+					}
 		$articulo->update();
 		
 			$kar=new Kardex;

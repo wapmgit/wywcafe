@@ -345,6 +345,11 @@ $this->middleware('auth');
     public function notac (Request $request){
 				$idcliente=explode("_",$request->get('id_cliente'));
 				$aux=$idcliente[0];
+				  $movd=DB::table('clientes')
+				  ->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')
+				  ->join('depvendedor','depvendedor.idvendedor','=','vendedores.id_vendedor')
+				  ->where('clientes.id_cliente','=',$aux)->first();
+			    $dep=$movd->id_deposito;
             if($request->ajax()){
 			$q2=DB::table('notasadm as n')
 			->join('clientes as c','c.id_cliente','=','n.idcliente')
@@ -368,7 +373,10 @@ $this->middleware('auth');
 		->orderby('fecha_emi','asc')
 		->limit(1)
 		->get();
-         return response()->json([$q2,$datov,$credito]); 
+		$articulos=DB::table('articulo')->join('existencia as ex','ex.idarticulo','=','articulo.idarticulo')->where('ex.existencia','>',0)->where('articulo.estado','=',"Activo")->where('articulo.sevende','=','1')->where('ex.id_almacen','=',$dep)
+				->select(DB::raw('CONCAT(articulo.codigo," ",articulo.nombre) as articulo'),'articulo.idarticulo','ex.existencia as stock','articulo.costo','articulo.precio1 as precio_promedio','articulo.precio2','ex.id_almacen','articulo.iva','articulo.fraccion','articulo.mprima as licor')
+				-> get(); 
+         return response()->json([$q2,$datov,$credito,$articulos]); 
 		 }
      }
 	 	public function retencion ($id){

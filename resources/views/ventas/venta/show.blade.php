@@ -14,10 +14,10 @@
 	<td> <b> <small>Vendedor:  </small></b> </br>{{$venta->vendedor}}</td><td><small><b>FORMA DE PAGO:</b>  {{$venta->estado}}</small></td>
 	</tr></table>
 	</div>
-</div>
-       <div class ="row">                                         
+</div></br> 
+       <div class ="row">                                        
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					</br>
+					
                   <table width="100%" BORDER="1">
                       <thead style="background-color: #A9D0F5">                    
                           <th>Producto</th>
@@ -143,10 +143,10 @@ $(document).ready(function(){
   document.getElementById('imprimir').style.display="none";
   document.getElementById('regresar').style.display="none";
   window.print(); 
-  window.location="/ventas/venta";
+  window.location="<?php echo $ruta; ?>";
     });
 $('#regresar').on("click",function(){
-  window.location="/ventas/venta";
+  window.location="<?php echo $ruta; ?>";
   
 });
 });

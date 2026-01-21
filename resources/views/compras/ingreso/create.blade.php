@@ -41,8 +41,9 @@ $fserver=date('Y-m-d');
                 <div class="form-group">
                 	<label for="tipo_comprobante">Tipo comprobante</label>
                        <select name="tipo_comprobante" class="form-control">
-                           <option value="FAC">Factura</option>
-                           <option value="N/E">Nota de Entrega</option>
+                            <option value="N/E">Nota de Entrega</option>
+						   <option value="FAC">Factura</option>
+                          
                        </select>
                          <input type="hidden" name="vtasa" id="vtasa" value="{{$empresa->tc}}">
                 </div>

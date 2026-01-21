@@ -38,10 +38,8 @@
 					<td><small><small> <?php echo substr( $cat->direccion, 0, 20 ); ?></small></small></td>
 					<td><small><small>{{ $cat->vendedor}}</small></small></td>
 					<td>
-				@if($rol->editcliente==1)	<a href="{{URL::action('PacientesController@edit',$cat->id_cliente)}}"><button class="btn btn-warning btn-xs">Edit.</button></a>@endif		
-				@if($rol->crearventa==1)	<a href="{{URL::action('VentaController@edit',$cat->id_cliente)}}"><button class="btn btn-primary btn-xs">Fact.</button></a>@endif
-                @if($rol->edocta==1) 	<a href="{{URL::action('PacientesController@show',$cat->id_cliente)}}"><button class="btn btn-success btn-xs">Edo. Cta.</button></a>@endif
-					
+				@if($rol->editcliente==1)	<a href="{{URL::action('PacientesController@edit',$cat->id_cliente)}}"><button class="btn btn-warning btn-xs">Edit.</button></a>@endif			
+                @if($rol->edocta==1) 	<a href="{{URL::action('PacientesController@show',$cat->id_cliente)}}"><button class="btn btn-success btn-xs">Edo. Cta.</button></a>@endif					
 					</td>
 				</tr>
 					@include('pacientes.paciente.modalalta')

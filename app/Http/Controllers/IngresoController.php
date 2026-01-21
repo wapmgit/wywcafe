@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Input;
 use sisventas\Http\Requests\IngresoFormRequest;
 use DB;
 use sisventas\Articulo;
+use sisventas\Existencia;
 use sisventas\ingreso;
 use sisventas\Proovedor;
 use sisventas\Movbanco;
@@ -110,7 +111,10 @@ class IngresoController extends Controller
     $ingreso->estatus=0;
     $ingreso->retenido=0;
     $ingreso-> save();
-
+		$dep=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first();
 	if($request->get('totala')>0){		
   // inserta el recibo
           $idpago=$request->get('tidpago');
@@ -206,8 +210,15 @@ class IngresoController extends Controller
 			$articulo->precio2=$pt2;
 			$articulo->precio_t=($costot*(($impuesto/100)+1))/((100-$util2)/100);
 			}							
-	  }
-
+	  }			
+	  $deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$idarticulo[$cont])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia+$cantidad[$cont]);
+					$exis->update();
 		$articulo->update();
 		
 		$kar=new Kardex;
@@ -299,11 +310,15 @@ public function destroy(Request $request, $id){
 	$user=Auth::user()->name;
     $ingreso=new devolucionCompras;
     $ingreso->idcompra=$id;
-    $ingreso->idemprsa=$ide;
+    $ingreso->idempresa=$ide;
     $mytime=Carbon::now('America/Lima');
     $ingreso->fecha_hora=$mytime->toDateTimeString();
 	$ingreso->usuario=$user;
     $ingreso-> save();
+	$dep=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first();
 			$detalles=DB::table('detalle_ingreso as da')
             -> select('da.idarticulo as cod','da.cantidad')
             -> where ('da.idingreso','=',$id)
@@ -326,6 +341,15 @@ public function destroy(Request $request, $id){
 	$stock=$articulo->stock;
 	$articulo->stock=($articulo->stock-$arraycan[$i]);
     $articulo->update();
+		$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$arraycod[$i])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$arraycan[$i]);
+					$exis->update();
+					
 			$kar=new Kardex;
 		$kar->fecha=$mytime->toDateTimeString();
 		$kar->documento="DEV:C-".$id;

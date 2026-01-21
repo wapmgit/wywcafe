@@ -1,6 +1,7 @@
 @extends ('layouts.admin')
 @section ('contenido')
 @include('almacen.articulo.empresa')
+<?php $acumexistencia=0; ?>
 <div class="row" id="principal">
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 		<h3>Listado de Articulos <a href="articulo/create">@if($rol->newarticulo==1)<button class="btn btn-info">Nuevo</button>@endif</a></h3>
@@ -39,7 +40,7 @@
 					<td>{{ $cat->codigo}}</td>
 					<td><a href="{{URL::action('ArticuloController@show',$cat->idarticulo)}}"><i class="fa fa-fw fa-bar-chart-o"></i> </a>{{$cat->nombre}}</td>					
 					<td>{{ $cat->categoria}}</td>
-					<td>{{ $cat->stock}}</td>
+					<td  ><a href="" data-target="#modal-existencia-{{$cat->idarticulo}}" data-toggle="modal">{{ $cat->stock}}</a>@include('almacen.articulo.modal_existencia')</td>
 						<td  > <?php if ($cat->imagen==""){?> <img src="{{ asset('/imagenes/articulos/ninguna.jpg')}}" alt="{{$cat->nombre}}" height="20px" width="20px" class="img-thumbnail"><?php }else{ ?><img src="{{ asset('/imagenes/articulos/'.$cat->imagen)}}" alt="{{$cat->nombre}}" height="15px" width="30px" class="img-thumbnail"><?php } ?> </td>
 					<td>{{ $cat->estado}}</td>
 					<td><?php echo number_format($cat->precio1, 2,',','.'); ?></td>

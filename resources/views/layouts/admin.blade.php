@@ -155,13 +155,14 @@
                 <li><a href="/pacientes/paciente"><i class="fa fa-circle-o"></i> Clientes</a></li>
                 <li><a href="/proveedores/proveedor"><i class="fa fa-circle-o"></i> Proveedores</a></li>
 				<li><a href="/vendedor/vendedor"><i class="fa fa-circle-o"></i> Vendedores</a></li>
+				<li><a href="/depositos/deposito"><i class="fa fa-circle-o"></i> Depositos</a></li>
                 <li><a href="/almacen/categoria"><i class="fa fa-circle-o"></i> Grupos</a></li>
                 <li><a href="/almacen/articulo"><i class="fa fa-circle-o"></i> Articulos</a></li>
                 <li><a href="/rutas/rutas"><i class="fa fa-circle-o"></i> Rutas</a></li>
 				
               </ul>
             </li>
-                
+               <!-- 
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -171,10 +172,10 @@
               <ul class="treeview-menu">
 				 <li><a href="/pedido/pedido"><i class="fa fa-circle-o"></i> Pedidos</a></li> 
 				 <li><a href="/pedido/reporte/reporte"><i class="fa fa-circle-o"></i> Reporte Pedido</a></li> 
-				 <!--<li><a href="/pedido/descargados"><i class="fa fa-circle-o"></i> Pedidos Descargados</a></li> -->
+				 <!--<li><a href="/pedido/descargados"><i class="fa fa-circle-o"></i> Pedidos Descargados</a></li>
 				 <li><a href="/pedido/reporte/sector"><i class="fa fa-circle-o"></i> Pedidos por Sector</a></li> 
 				 </ul>
-            </li>
+            </li> -->
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -185,6 +186,7 @@
                 <li><a href="/compras/ingreso"><i class="fa fa-circle-o"></i> Compras </a></li>
                 <li><a href="/ventas/venta"><i class="fa fa-circle-o"></i> Ventas</a></li>
                 <li><a href="/gastos/gasto"><i class="fa fa-circle-o"></i> Gastos</a></li>
+				 <li><a href="/deposito/traslado"><i class="fa fa-circle-o"></i> Traslado de Inventario</a></li>
 				<!--<li><a href="/ventas/ventaf"><i class="fa fa-circle-o"></i> Forma Libre</a></li>
 				<li><a href="/ventas/fexterna"><i class="fa fa-circle-o"></i> Factura Externa</a></li>
 				<li><a href="/almacen/deposito"><i class="fa fa-circle-o"></i> Control Vacios</a></li> 	-->

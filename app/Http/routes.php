@@ -34,12 +34,18 @@ Route::resource('almacen/deposito/recepdebo','DepositoController@recepdebo');
 Route::resource('almacen/deposito/gestion','DepositoController@gestion');
 Route::resource('deposito/deposito','DepositoController@deposito');
 Route::resource('deposito/regalmacen','DepositoController@regalmacen');
+//traslado
+Route::resource('deposito/traslado','TrasladoController');
+Route::resource('/deposito/traslado/listar','TrasladoController@listar');
 //vendedores
 Route::resource('vendedor/vendedor','VendedoresController');
 Route::resource('vendedor/cobrar','VendedoresController@porcobrar');
 Route::resource('vendedor/clientes','VendedoresController@clientes');
 
+//dep vendedor
+Route::resource('depositos/deposito','DepvendedorController');
 
+//proveedor
 Route::resource('proveedores/proveedor/historico','ProveedorController@historico');
 Route::resource('proveedores/pagar','CxpagarController');
 Route::resource('proveedores/proveedor','ProveedorController');
