@@ -107,7 +107,7 @@ class VentaController extends Controller
 		}
       return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
     }
-    public function store(ventaFormRequest $request){
+    public function store(Request $request){
 		$ide=Auth::user()->idempresa;
 	 $modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
 	
