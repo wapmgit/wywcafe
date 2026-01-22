@@ -42,7 +42,7 @@ return $insertar_ceros = $recibo.$numero;
 						  <td><font size="1"><small><small>{{$det->cantidad}}</small></small></font></td>
                           <td><font size="1"><small><small><small><?php echo strtolower($det->articulo);?></small></small></small></font></td>                       
                           <td><font size="1"><small><small><?php echo number_format( $det->precio_venta, 2,',','.'); ?></small></small></font></td>
-                          <td><font size="1"><small><small><?php echo number_format( (($det->cantidad*$det->precio_venta)-$det->descuento), 2,',','.'); ?></small></small></font></td>
+                          <td><font size="1"><small><small><?php echo number_format( (($det->cantidad*$det->precio_venta)), 2,',','.'); ?></small></small></font></td>
                         </tr>
                         @endforeach
                       </tbody>

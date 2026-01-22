@@ -36,7 +36,7 @@ $idv=0;
           @endforeach
 		
 	<div class="row" style="background-color:#f3f4f4"> 
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 			<h3>Nueva Venta</h3>
 			@if (count($errors)>0)
 			<div class="alert alert-danger">
@@ -53,7 +53,7 @@ $idv=0;
 			<input type="hidden" value="{{$empresa->tc}}" id="valortasa" name="tc"></input>
 		  <input type="hidden" value="{{$empresa->peso}}" id="valortasap" name="peso"></input>
         </div>
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 		<h4 id="nombrevendedor"></h4>
 									    <div class="form-group">
             			             <label for="tipo_precio">Vendedor </label><br>
@@ -108,9 +108,10 @@ $idv=0;
                 </div>
                 
 				<div  class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<table><tr><td>	<div class="form-group">
+				  <div class="table-responsive">
+				<table width="100%"><tr><td>	<div class="form-group">
 					<label for="serie_comprobante">Fecha Emision</label>
-							<input type="date"  style="width: 150px" name="fecha_emi" <?php if ($nivel=="L"){?> readonly <?php }  ?>  id="fecha_emi" value="<?php echo $fserver;?>" class="form-control">
+							<input type="date"  style="width: 100px" name="fecha_emi" <?php if ($nivel=="L"){?> readonly <?php }  ?>  id="fecha_emi" value="<?php echo $fserver;?>" class="form-control">
 					</div></td><td><div class="form-group">
 						<label for="serie_comprobante">Serie</label>
 						<input type="text" style="background-color:#edefef"  style="width: 100px" name="serie_comprobante" value="NE00" size="5" class="form-control"placeholder="serie del comprobante" > 
@@ -139,6 +140,7 @@ $idv=0;
 					</tr></table>
 
 			
+			</div>	
 			</div>	
             </div>
             <div class ="row" id="divarticulos" style="display: true">
