@@ -102,19 +102,32 @@ class CategoriaController extends Controller
         return view('almacen.categoria.grafico',["vene"=>$vene,"vfeb"=>$vfeb,"vmar"=>$vmar,"vabr"=>$vabr,"vmay"=>$vmay,"vjun"=>$vjun,"vjul"=>$vjul,"vago"=>$vago,"cene"=>$cene,"cfeb"=>$cfeb,"cmar"=>$cmar,"cmay"=>$cmay,"cabr"=>$cabr,"cjun"=>$cjun,"cjul"=>$cjul,"cago"=>$cago,"csep"=>$csep,"vsep"=>$vsep,"voct"=>$voct,"coct"=>$coct,"vnov"=>$vnov,"cnov"=>$cnov,"vdic"=>$vdic,"cdic"=>$cdic,"empresa"=>$empresa,"clientes"=>$clientes,"proveedor"=>$proveedor,"articulo"=>$articulos,"vendedores"=>$vendedores]);
     } else {
 		$idvende=Auth::user()->vendedor;
+		$depvend=DB::table('depvendedor')->select('id_deposito')->where('idvendedor','=',$idvende)->first();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
 		$monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
 		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')-> where('clientes.idempresa','=',$ide)-> where('clientes.vendedor','=',$idvende)-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
          $contador=DB::table('venta')->select('idventa')->limit('1')->orderby('idventa','desc')->get();
 		 $vendedores=DB::table('vendedores')-> where('idempresa','=',$ide)->where('id_vendedor','=',$idvende)->where('estatus','=',1)->get(); 
 			//dd($contador);
-       $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
-        ->where('art.idempresa','=',$ide)
-		-> where('art.estado','=','Activo')
-        -> where ('art.stock','>','0')
-        ->groupby('articulo','art.idarticulo')
-        -> get();
+     $articulos = DB::table('articulo as a')
+    ->join('existencia as ex', 'ex.idarticulo', '=', 'a.idarticulo')
+    ->selectRaw('CONCAT(a.codigo, " ", a.nombre) as articulo') // Más limpio que DB::raw
+    ->addSelect([
+        'a.idarticulo',
+        'ex.existencia as stock',
+        'a.costo',
+        'a.precio1 as precio_promedio',
+        'a.precio2',
+        'ex.id_almacen',
+        'a.iva',
+        'a.fraccion',
+        'a.mprima as licor'
+    ])
+    ->where('a.estado', 'Activo')
+    ->where('a.sevende', '1')
+    ->where('ex.id_almacen', $depvend->id_deposito)
+    ->where('ex.existencia', '>', 0)
+    ->get();
         //dd($articulos);
 		if ($contador==""){$contador=0;}
 		return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);

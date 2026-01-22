@@ -373,9 +373,25 @@ $this->middleware('auth');
 		->orderby('fecha_emi','asc')
 		->limit(1)
 		->get();
-		$articulos=DB::table('articulo')->join('existencia as ex','ex.idarticulo','=','articulo.idarticulo')->where('ex.existencia','>',0)->where('articulo.estado','=',"Activo")->where('articulo.sevende','=','1')->where('ex.id_almacen','=',$dep)
-				->select(DB::raw('CONCAT(articulo.codigo," ",articulo.nombre) as articulo'),'articulo.idarticulo','ex.existencia as stock','articulo.costo','articulo.precio1 as precio_promedio','articulo.precio2','ex.id_almacen','articulo.iva','articulo.fraccion','articulo.mprima as licor')
-				-> get(); 
+	$articulos = DB::table('articulo as a')
+    ->join('existencia as ex', 'ex.idarticulo', '=', 'a.idarticulo')
+    ->selectRaw('CONCAT(a.codigo, " ", a.nombre) as articulo') // Más limpio que DB::raw
+    ->addSelect([
+        'a.idarticulo',
+        'ex.existencia as stock',
+        'a.costo',
+        'a.precio1 as precio_promedio',
+        'a.precio2',
+        'ex.id_almacen',
+        'a.iva',
+        'a.fraccion',
+        'a.mprima as licor'
+    ])
+    ->where('a.estado', 'Activo')
+    ->where('a.sevende', '1')
+    ->where('ex.id_almacen', $dep)
+    ->where('ex.existencia', '>', 0)
+    ->get();
          return response()->json([$q2,$datov,$credito,$articulos]); 
 		 }
      }

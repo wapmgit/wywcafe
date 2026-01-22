@@ -130,7 +130,8 @@
 
                     <div class="form-group" align="center">	</br>
 					 <button type="button" id="regresar" class="btn btn-danger" data-dismiss="modal" title="Presione Alt+flecha izq. para regresar">Regresar</button>
-                     <button type="button" id="imprimir" class="btn btn-primary" data-dismiss="modal">Imprimir</button>
+                    <a href="/ventas/venta/create"> <button class="btn btn-info ">Facturar</button>
+					<button type="button" id="imprimir" class="btn btn-primary" data-dismiss="modal">Imprimir</button>
                     </div>
                 </div>  
         </div>

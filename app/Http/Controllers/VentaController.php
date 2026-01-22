@@ -112,6 +112,7 @@ class VentaController extends Controller
 	 $modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
 	
 		$user=Auth::user()->name;
+		$nivel=Auth::user()->nivel;
  /* try{
   DB::beginTransaction();*/
    $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->first();
@@ -386,7 +387,10 @@ If ($request->get('convertir')=="on"){
   return Redirect::to('ventas/formalibre/'.$venta->idventa.'_'.$venta->formato);
 	}
 else{
-  return Redirect::to('ventas/venta/'.$venta->idventa);
+	if($nivel=="A"){
+	return Redirect::to('ventas/venta/'.$venta->idventa); }else{
+	return Redirect::to('ventas/recibo/'.$venta->idventa);	
+	}
 }
 }
 public function formal($id){
