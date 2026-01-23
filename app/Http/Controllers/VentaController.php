@@ -105,7 +105,7 @@ class VentaController extends Controller
         //dd($articulos);
 		if ($contador==""){$contador=0;}
 		}
-      return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
+      return view("ventas.venta.create",["nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
     }
     public function store(Request $request){
 		$ide=Auth::user()->idempresa;
@@ -698,7 +698,7 @@ public function ver(Request $request, $id){
 			$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
 			$venta=DB::table('venta as v')
             -> join ('clientes as p','v.idcliente','=','p.id_cliente')
-            -> select ('v.idventa','v.fecha_emi','p.nombre','p.cedula','p.direccion','p.licencia','v.tipo_comprobante','v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado','v.total_venta','v.devolu')
+            -> select ('v.idventa','v.fecha_emi','p.nombre','p.cedula','p.direccion','p.licencia','v.tipo_comprobante','v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado','v.total_venta','v.devolu','v.descuento')
             ->where ('v.idventa','=',$id)
             -> first();
             $detalles=DB::table('detalle_venta as dv')

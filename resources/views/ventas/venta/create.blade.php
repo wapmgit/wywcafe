@@ -114,18 +114,18 @@ $idv=0;
 							<input type="date"  style="width: 100px" name="fecha_emi" <?php if ($nivel=="L"){?> readonly <?php }  ?>  id="fecha_emi" value="<?php echo $fserver;?>" class="form-control">
 					</div></td><td><div class="form-group">
 						<label for="serie_comprobante">Serie</label>
-						<input type="text" style="background-color:#edefef"  style="width: 100px" name="serie_comprobante" value="NE00" size="5" class="form-control"placeholder="serie del comprobante" > 
+						<input type="text" style="background-color:#edefef" <?php if ($nivel=="L"){?> readonly <?php }  ?>  style="width: 100px" name="serie_comprobante" value="NE00" size="5" class="form-control"placeholder="serie del comprobante" > 
 					</div>	</td><td>	<div class="form-group">
 						<label for="num_comprobante">Numero</label>
-					 <input type="text" name="num_comprobante"  style="width: 100px" style="background-color:#edefef"value="<?php echo add_ceros($idv,$ceros); ?>" class="form-control" placeholder="numero del comprobante" > 
+					 <input type="text" name="num_comprobante"  <?php if ($nivel=="L"){?> readonly <?php }  ?>  style="width:  100px" style="background-color:#edefef"value="<?php echo add_ceros($idv,$ceros); ?>" class="form-control" placeholder="numero del comprobante" > 
 					</div></td><td><div class="form-group">
 						<label for="comision">Comision</label>
-					 <input type="number" name="comision"  style="width: 70px" style="background-color:#edefef" id="comision"  value="" class="form-control" placeholder="%" >
+					 <input type="number" name="comision"  <?php if ($nivel=="L"){?> readonly <?php }  ?>  style="width: 70px" style="background-color:#edefef" id="comision"  value="" class="form-control" placeholder="%" >
 					</div>
 					</td>
 					<td><div class="form-group">
 					<label for="comision">Credito</label>
-					<input type="number" value="" id="credito"  style="width: 70px" name="diascre" class="form-control">
+					<input type="number" value="" id="credito" <?php if ($nivel=="L"){?> readonly <?php }  ?>  style="width: 70px" name="diascre" class="form-control">
 					</div>
 					</td>		
 			<!-- <td><div class="form-group">
@@ -218,18 +218,19 @@ $idv=0;
                   </table>
 				  </div>
                     </div>
-					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="display: none" id="divnc"  align="right">
+					
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="display: none" id="divnc"  align="left">
 						¿ Aplicar N/C? <input type="checkbox"  name="apcnc" id="apcnc" />
 						<input type="number"  name="montonc" id="montonc">
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" id="botones"  align="right">
 						  <div class="form-group">
-								<button class="btn btn-primary" id="guardar" type="button" accesskey="l">Tota<u>l</u>izar</button>
 								<button class="btn btn-danger" type="button"  id="btncancelar">Cancelar</button>
-
+								<button class="btn btn-primary" id="guardar" type="button" accesskey="l">Tota<u>l</u>izar</button>								
 							</div>
 						</div>
-                </div>
+					</div>
+               
                     
                 </div>
 			</div>
@@ -297,7 +298,7 @@ $idv=0;
 					   	<!--	<div class="col-lg-6 ol-md-6 col-sm-6 col-xs-6" style="display: none" id="cfl">
 							¿ Convertir en Factura ? <input type="checkbox"  name="convertir" />							
 							</div> -->
-						<div class="col-lg-6 ol-md-6 col-sm-6 col-xs-6" >
+						<div class="col-lg-12 ol-md-12 col-sm-12 col-xs-12" >
 						<button type="button" class="btn btn-danger" id="regresar" data-dismiss="modal">Cancelar</button>
 						<input name="_token" value="{{ csrf_token() }}" type="hidden" ></input>
 						<button type="submit" id="procesa" class="btn btn-primary" ><u>P</u>rocesar</button>

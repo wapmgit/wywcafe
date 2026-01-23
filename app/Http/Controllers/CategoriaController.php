@@ -130,7 +130,7 @@ class CategoriaController extends Controller
     ->get();
         //dd($articulos);
 		if ($contador==""){$contador=0;}
-		return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
+		return view("ventas.venta.create",["nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
     }
     }
     public function store (CategoriaFormRequest $request)
