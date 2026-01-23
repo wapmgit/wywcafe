@@ -37,6 +37,9 @@ Route::resource('deposito/regalmacen','DepositoController@regalmacen');
 //traslado
 Route::resource('deposito/traslado','TrasladoController');
 Route::resource('/deposito/traslado/listar','TrasladoController@listar');
+//tostadores
+Route::resource('produccion/tostador','TostadorController');
+Route::resource('produccion/tostador/pagar','TostadorController@pagar');
 //vendedores
 Route::resource('vendedor/vendedor','VendedoresController');
 Route::resource('vendedor/cobrar','VendedoresController@porcobrar');
