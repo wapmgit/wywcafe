@@ -199,8 +199,8 @@ catch(\Exception $e)
         $articulo->grados=$request->get('grados');
 		$articulo->clase=$request->get('clase');
         $articulo->origen=$request->get('origen');
-        $articulo->mprima=$request->get('mprima');
-		if($request->get('nivelp')){ $articulo->nivelp=$request->get('comi'); }else{ $articulo->nivelp=0;}
+		if($request->get('mprima')){$articulo->mprima=$request->get('mprima'); }else{ $articulo->mprima=0;}
+        if($request->get('nivelp')){ $articulo->nivelp=$request->get('nivelp'); }else{ $articulo->nivelp=0;}
 
           if (input::hasfile($request->get('imagen'))){
         	$file=input::file('imagen');

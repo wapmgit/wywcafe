@@ -90,7 +90,7 @@
 		<tr>
 		<td>{{$tosta->kg}} </td>
 		<td>{{$tosta->pendiente}}</td>	
-		<td><a href="javascript:abrirespecial({{$tosta->id}},{{$tosta->pendiente}});"><button  id="abono" class="btn btn-info btn-xs">Abono</button></a></td>	
+		<td><?php if($tosta->pendiente>0){?><a href="javascript:abrirespecial({{$tosta->id}},{{$tosta->pendiente}});"><button  id="abono" class="btn btn-info btn-xs">Abono</button></a><?php } ?></td>	
 		</tr>
 		</table>
 </div>			

@@ -273,7 +273,6 @@ $("#precio2").change(reverso2);
        }
    });
    	$("#cbx3").click(function() {
-		alert();
        if ($(this).is(":checked")){
        const element = document.getElementById('nivelp'); 
 		element.disabled = false;
