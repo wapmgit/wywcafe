@@ -45,14 +45,25 @@
             			
             		</div>
             </div>
-				<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+		<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
+            	 <div class="form-group">
+            			<label >Maquina</label>
+            			<select name="maquina" class="form-control">
+            				@foreach ($maquina as $c)
+            				<option value="{{$c->iddep}}">{{$c->nombre}}</option>
+            				@endforeach
+            			</select>
+            			
+            		</div>
+            </div>
+				<div class="col-lg-3 col-sm-3 col-md-3 col-xs-12">
             <div class="form-group">
             	<label for="descripcion">Cochas</label>
             	<input type="number" name="cochas" id="cochas" required class="form-control" value="1" step="1">
             </div>
             </div>
 
-							<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+		<div class="col-lg-3 col-sm-3 col-md-3 col-xs-12">
 		   <div class="form-group">
             	<label for="descripcion">Kg Total Subidos</label>
             	<input type="number" name="kgsubidos" id="kgs" required class="form-control">

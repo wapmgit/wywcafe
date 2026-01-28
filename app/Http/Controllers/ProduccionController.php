@@ -50,7 +50,10 @@ class ProduccionController extends Controller
             ->where ('idempresa','=',$ide)
              ->where ('nivelp','=',1)
             ->get();
-
+		$maquina=DB::table('depmaquina')		
+            ->where ('idempresa','=',$ide)
+             ->where ('tipo','=',2)
+            ->get();
 		 $materia=DB::table('articulo as a')
 			->select('a.idarticulo','a.nombre','a.stock')			
             ->where ('a.idempresa','=',$ide)
@@ -59,7 +62,7 @@ class ProduccionController extends Controller
             ->orderBy('a.nombre','asc')
             ->get();
 			//dd($materia);
-        return view("produccion.tostado.create",["materia"=>$materia,"tostador"=>$tostador,"producto"=>$producto]);
+        return view("produccion.tostado.create",["maquina"=>$maquina,"materia"=>$materia,"tostador"=>$tostador,"producto"=>$producto]);
     }
 		    public function savetostado (Request $request)
     {
@@ -92,7 +95,7 @@ class ProduccionController extends Controller
 		$tost->kg=$tost->kg+$request->get('kgcomi');
 		$tost->pendiente=$tost->pendiente+$request->get('kgcomi');
 		$tost->update();
-		$dep=Depmaquina::findOrFail(1);
+		$dep=Depmaquina::findOrFail($request->get('maquina'));
 		$dep->kg=$dep->kg+$request->get('kgcomima');
 		$dep->pendiente=$dep->pendiente+$request->get('kgcomima');
 		$dep->update();

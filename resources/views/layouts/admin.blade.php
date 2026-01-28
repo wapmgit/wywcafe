@@ -207,7 +207,7 @@
 				 <li><a href="/produccion/molida"><i class="fa fa-circle-o"></i>Molida/ Empaquetada</a></li> 
 				<li><a href="/reportes/produccion"><i class="fa fa-circle-o"></i> Reporte Produccion</a></li> 
 				 <li><a href="/produccion/tostador"><i class="fa fa-circle-o"></i> Tostador</a></li> 
-				 <li><a href=""><i class="fa fa-circle-o"></i> Maquinaria</a></li> 
+				 <li><a href="/produccion/maquina"><i class="fa fa-circle-o"></i> Maquinaria</a></li> 
 				 </ul>
             </li>
             <li class="treeview">

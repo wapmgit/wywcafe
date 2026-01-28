@@ -40,6 +40,9 @@ Route::resource('/deposito/traslado/listar','TrasladoController@listar');
 //tostadores
 Route::resource('produccion/tostador','TostadorController');
 Route::resource('produccion/tostador/pagar','TostadorController@pagar');
+//maquinas
+Route::resource('produccion/maquina','MaquinariaController');
+Route::resource('produccion/maquina/pagar','MaquinariaController@pagar');
 //vendedores
 Route::resource('vendedor/vendedor','VendedoresController');
 Route::resource('vendedor/cobrar','VendedoresController@porcobrar');
