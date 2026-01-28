@@ -171,7 +171,30 @@ class ProduccionController extends Controller
             ->where('idempresa','=',$ide)
 			->orderBy('id_deposito','asc')			
             ->first();
-		
+			//de la materi aprima
+			$artp=Articulo::findOrFail($request->get('producto'));
+			$stock=$artp->stock;
+			$artp->stock=$artp->stock+$request->get('kgdif');
+			$artp->update();
+			$kar=new Kardex;
+		$kar->fecha=$mytime->toDateTimeString();
+		$kar->documento="PRODME-".$categoria->idproduccion;
+		$kar->idarticulo=$request->get('producto');
+		$kar->cantidad=$request->get('kgdif');
+		$kar->exis_ant=$stock;
+		$kar->costo=$artp->costo;
+		$kar->tipo=2; 
+		$kar->user=$user;
+		$kar->save();
+			 $dep=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$request->get('producto'))		
+            ->first();
+					$exis=Existencia::findOrFail($dep->id);
+					$exis->existencia=($exis->existencia+$request->get('kgdif'));
+					$exis->update();
+		// de la materia prima
 		   $idp=$request->get('idproduccion');
            $produ=$request->get('produccion');
 		   $kgp=$request->get('kgproduccion');	 

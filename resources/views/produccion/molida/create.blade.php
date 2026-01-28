@@ -105,7 +105,7 @@
 			@endforeach
 				<tr><td>Total Kg Empaquetados</td>
 				<td><input type="number" name="kgemp" id="kgemp" value="0" step="0.01" class="form-control"></td>
-				<td>Total Kg Dif</td>
+				<td>Total Kg por Empaquetar</td>
 				<td><input type="number" name="kgdif" id="kgdif" value="0"  step="0.01"  class="form-control"></td>
 				</tr>
 			
@@ -154,18 +154,22 @@ $(document).ready(function(){
 
 });
 	function abrircalc(id,peso){
-	var kge=$('#kgemp').val();
-	var kgdif=$('#kgdif').val();
-	var cnt=$('#cnt'+id).val();
+	var kge=$('#kgemp').val(); 
+	var kgdif=$('#kgdif').val(); 
+	var cnt=$('#cnt'+id).val();  
 	var calc=(cnt*peso)/1000;	
-	
+	var kglinea=$('#kg'+id).val();
+	kgdif=(parseFloat(kgdif)+parseFloat(kglinea));
 		var acume=parseFloat(kge)+parseFloat(calc);
 		if(calc>kgdif){
 			alert('Cantidad Empaquetada no puede ser Mayor a kg Molidos');
 			$('#cnt'+id).val(0);
 			$('#kg'+id).val(0);
 			$('#kgdif').val(kgdif);
+			acume=acume-(parseFloat(calc)+parseFloat(kglinea));
+			$('#kgemp').val(acume);
 		}else{
+			acume=acume-parseFloat(kglinea);
 			$('#kg'+id).val(calc);
 			$('#kgemp').val(acume);
 			$('#kgdif').val(kgdif-calc);

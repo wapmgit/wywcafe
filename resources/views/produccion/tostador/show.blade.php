@@ -81,7 +81,7 @@
   <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
 		<table class="table table-striped table-bordered table-condensed table-hover">
 		<tr ><td colspan="2" align="center"><strong>Saldo</strong></td>
-		<td> Tasa:<input type="number" value="9" style="width: 60px" id="txk" name="txk" class="form-control"></td></tr> 
+		<td> Tasa Cafe:<input type="number" value="9" style="width: 60px" id="txk" name="txk" class="form-control"></td></tr> 
 		<tr>
 		<td>Kg</td>
 		<td>Pendiente</td>		
@@ -231,10 +231,10 @@ $(document).ready(function(){
   document.getElementById('imprimir').style.display="none";
   document.getElementById('regresar').style.display="none";
   window.print(); 
-  window.location="/almacen/deposito";
+  window.location="/produccion/tostador";
     });
 $('#regresar').on("click",function(){
-  window.location="/almacen/deposito";
+  window.location="/produccion/tostador";
   
 });
 	$('#bt_pago').click(function(){
