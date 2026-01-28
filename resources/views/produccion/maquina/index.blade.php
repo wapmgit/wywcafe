@@ -23,7 +23,12 @@
 				<tr>
 					<td>{{ $cat->iddep}}</td>
 					<td>{{ $cat->nombre}}</td>
-					<td>{{ $cat->tipo}}</td>
+					<td>
+					<?php if($cat->tipo==1){ echo "Trilladora";} ?>
+					<?php if($cat->tipo==2){ echo "Tostadora";} ?>
+					<?php if($cat->tipo==3){ echo "Molino";} ?>
+					<?php if($cat->tipo==4){ echo "Empaquetadora";} ?>
+					</td>
 					<td>{{ $cat->marca}}</td>
 					<td>{{ $cat->capacidad}}</td>
 					<td>
