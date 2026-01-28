@@ -183,7 +183,7 @@ class ProduccionController extends Controller
 		$kar->cantidad=$request->get('kgdif');
 		$kar->exis_ant=$stock;
 		$kar->costo=$artp->costo;
-		$kar->tipo=2; 
+		$kar->tipo=1; 
 		$kar->user=$user;
 		$kar->save();
 			 $dep=DB::table('existencia')->select('id')
