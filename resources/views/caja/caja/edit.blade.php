@@ -16,10 +16,16 @@
 		</div>
 	</div>
 
-			{!!Form::model($banco,['method'=>'PATCH','route'=>['caja.caja.update',$banco->idcaja],'files'=>'true'])!!}
+			{!!Form::model($banco,['method'=>'PATCH','route'=>['caja.caja.update',$banco->idmoneda],'files'=>'true'])!!}
             {{Form::token()}}
            
  <div class="row">
+             	<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            		 <div class="form-group">
+            			<label for="nombre">Codigo</label>
+            			<input type="text" name="codigo" required value="{{$banco->codigo}}" class="form-control">
+            		</div>
+            	</div>
             	<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
             		 <div class="form-group">
             			<label for="nombre">Nombre</label>
@@ -29,27 +35,18 @@
         
             	<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
             		 <div class="form-group">
-            			<label for="nombre">Responsable</label>
-            			<input type="text" name="responsable" required value="{{$banco->responsable}}" class="form-control">
+            			<label for="nombre">Simbolo {{$banco->Simbolo}}</label>
+            			<input type="text" name="simbolo" required value="{{$banco->simbolo}}" class="form-control">
             		</div>
             	</div>
-
-            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-            	 <div class="form-group">
-            			<label for="codigo">Numero de Cuenta</label>
-            			<input type="text" name="cuenta" required value="{{$banco->cuentaban}}" class="form-control">
-            		</div>
-            </div>
-
                <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                   <div class="form-group">
-						<label for="saco">Moneda</label>
-            			<select name="idmoneda" class="form-control">					
-            				@foreach ($monedas as $cat)	
-							@if($cat->idmoneda==$banco->idmoneda)
-								<option value="{{$cat->idmoneda}}" selected>{{$cat->nombre}}</option>@endif
-            				<option value="{{$cat->idmoneda}}">{{$cat->nombre}}</option>
-            				@endforeach
+						<label for="saco">Tipo</label>
+            			<select name="tipo" class="form-control">					
+							<option value="0" selected>=</option>
+            				<option value="1">Bs</option>
+            				<option value="2">Ps</option>
+
             			</select>
 						</div>         </div>
 

@@ -19,8 +19,12 @@
             	<label for="nombre">Nombre</label>
             	<input type="text" name="nombre" class="form-control" value="{{$categoria->nombre}}" placeholder="Nombre...">
             </div>
+			   <div class="form-group">
+            	<label for="descripcion">Cedula</label>
+            	<input type="text" name="cedula" class="form-control" value="{{$categoria->telefono}}" placeholder="Cedula...">
+            </div>
             <div class="form-group">
-            	<label for="descripcion">telefono</label>
+            	<label for="descripcion">Telefono</label>
             	<input type="text" name="telefono" class="form-control" value="{{$categoria->telefono}}" placeholder="Telefono...">
             </div>
 			 <div class="form-group">

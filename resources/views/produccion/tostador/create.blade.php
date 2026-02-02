@@ -9,6 +9,10 @@
             	<label for="nombre">Nombre</label>
             	<input type="text" name="nombre" class="form-control"required placeholder="Nombre...">
             </div>
+			  <div class="form-group">
+            	<label for="nombre">Cedula</label>
+            	<input type="text" name="cedula" class="form-control" required placeholder="Cedula...">
+            </div>
 			   <div class="form-group">
             	<label for="nombre">Telefono</label>
             	<input type="text" name="telefono" class="form-control" placeholder="Telefono...">

@@ -119,8 +119,8 @@ class MaquinariaController extends Controller
         $mov->tipo_mov="N/D";
         $mov->numero=$pago[0]."-".$recibo->idrecibo; 
         $mov->concepto="Egre. Produccion";
-		$mov->tipo_per="T";
-        $mov->idbeneficiario="";
+		$mov->tipo_per="M";
+        $mov->idbeneficiario=$tost->iddep;
 		$mov->identificacion="";
         $mov->nombre=$tost->nombre;
         $mov->monto=$denomina[$contp]; 

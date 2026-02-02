@@ -39,9 +39,24 @@ class CajaController extends Controller
     {
         return view("caja.caja.create");
     }
+	        public function edit($id)
+    {
+         $banco=Monedas::findOrFail($id);//dd($banco);
+        return view("caja/caja.edit",["banco"=>$banco]);
+    }
+	      public function update(Request  $request,$id)
+    {
+        $banco=Monedas::findOrFail($id);
+        $banco->nombre=$request->get('nombre');
+        $banco->codigo=$request->get('codigo');
+        $banco->tipo=$request->get('tipo'); 
+        $banco->simbolo=$request->get('simbolo');        
+        $banco->update();
+        return Redirect::to('caja/caja');
+    }
 	    public function store (Request $request)
     {
-		//dd($request);
+		//
 		$ide=Auth::user()->idempresa;
         $categoria=new Monedas;
         $categoria->idempresa=$ide;
@@ -266,7 +281,19 @@ public function movimientos(Request $request)
 			->select('mov_ban.*','cli.nombre','cli.cedula as cedula')
             ->where('id_mov','=',$idrecibo)
            ->first();}
-	//	dd($mov);
+		    if($tipo=="T"){
+            $mov=DB::table('mov_ban')
+            ->join('tostador as cli','mov_ban.idbeneficiario','=','cli.id')
+			->select('mov_ban.*','cli.nombre','cli.cedula as cedula')
+            ->where('id_mov','=',$idrecibo)
+           ->first();}
+		    if($tipo=="M"){
+            $mov=DB::table('mov_ban')
+            ->join('depmaquina as cli','mov_ban.idbeneficiario','=','cli.iddep')
+			->select('mov_ban.*','cli.nombre','cli.marca as cedula')
+            ->where('id_mov','=',$idrecibo)
+           ->first();}
+		//dd($mov);
         return view('caja.caja.recibobanco',["caja"=>$banco,"movimiento"=>$mov,"empresa"=>$empresa]);
             
     }

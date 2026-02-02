@@ -39,6 +39,7 @@ class TostadorController extends Controller
         $categoria=new Tostador;
         $categoria->nombre=$request->get('nombre');
         $categoria->idempresa=$ide;
+        $categoria->cedula=$request->get('cedula');
         $categoria->telefono=$request->get('telefono');
 		$categoria->direccion=$request->get('direccion');
         $categoria->save();
@@ -53,6 +54,7 @@ class TostadorController extends Controller
     {		
         $categoria=Tostador::findOrFail($id);
         $categoria->nombre=$request->get('nombre');
+		$categoria->cedula=$request->get('cedula');
         $categoria->telefono=$request->get('telefono');
 		$categoria->direccion=$request->get('direccion');
         $categoria->update();
