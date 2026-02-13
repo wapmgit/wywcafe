@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>WyW</title>
+    <title>W&W Systems</title>
   <link rel="icon" href="{{asset('dist/img/nks.ico')}}">
     <!-- Font Awesome -->
 

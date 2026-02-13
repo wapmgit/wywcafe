@@ -125,6 +125,7 @@ Route::resource('/clientes/cliente/nc','PacientesController@notac');
 //Route::resource('/ventas/ventasf','VentaController@ventasf');
 Route::resource('/ventas/recargo','VentaController@recargos');
 Route::resource('/ventas/addrecargo','VentaController@addrecargos');
+Route::resource('/ventas/venta/save','VentaController@ventasave');
 
 // ventas formna libre
 Route::resource('ventas/ventaf','VentafController');

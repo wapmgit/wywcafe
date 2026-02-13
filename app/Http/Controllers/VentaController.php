@@ -107,7 +107,7 @@ class VentaController extends Controller
 		}
       return view("ventas.venta.create",["nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
     }
-    public function store(Request $request){
+    public function ventasave(Request $request){
 		$ide=Auth::user()->idempresa;
 	 $modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
 	
@@ -117,7 +117,180 @@ class VentaController extends Controller
   DB::beginTransaction();*/
    $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->first();
    if ($contador==NULL){$numero=0;}else{$numero=$contador->idventa;}
-//dd($request);
+
+//registra la venta
+    $venta=new Venta;
+	$idcliente=explode("_",$request->get('id_cliente'));
+    $venta->idcliente=$idcliente[0];
+    $venta->idempresa=$ide;
+    $venta->tipo_comprobante=$request->get('tipo_comprobante');
+    $venta->serie_comprobante=$request->get('serie_comprobante');
+    $venta->num_comprobante=($numero+1);
+    $venta->total_venta=$request->get('totalab');
+	$venta->total_iva=0;
+    $mytime=Carbon::now('America/Caracas');
+    $venta->fecha_hora=$mytime->toDateTimeString();
+	$venta->fecha_emi=$mytime->toDateTimeString();
+	$venta->fecha_fac=$mytime->toDateTimeString();
+	$venta->lastrecargo=$mytime->toDateTimeString();
+	$venta->fechahora=$mytime->toDateTimeString();
+    $venta->impuesto='16';
+	$venta->tasa=$request->get('tc');
+	$venta->mcosto=0;
+	$venta->mivaf=0;
+	$venta->texe=0;
+	if(empty($request->get('tdeuda'))){   $venta->saldo=$request->get('totalab');}
+	else { $venta->saldo=$request->get('tdeuda');}	
+    if ($venta->saldo > 0){
+    $venta->estado='Credito';} else { $venta->estado='Contado';}
+    $venta->devolu='0';
+	 $venta->idvendedor=$request->get('vpedido');
+    $venta->diascre=0;
+    $venta->comision=0;
+	$venta->montocomision=0;
+	$venta->user=$user;	
+   $venta-> save();
+  // dd($venta);
+  $dep=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idvendedor','=',$request->get('vpedido'))
+            ->where('idempresa','=',$ide)		
+            ->first();
+
+    // inserta el recibo
+          $idpago=$request->get('tidpago');
+           $idbanco=$request->get('tidbanco');
+		   $denomina=$request->get('denominacion');
+           $tmonto=$request->get('tmonto');
+           $tref=$request->get('tref');		 
+           $contp=0;
+		   $flicor=0;
+		   if($request->get('totalab')>0){
+              while($contp < count($idpago)){
+				$recibo=new Recibo;
+				$recibo->idempresa=$ide;
+				$recibo->idventa=$venta->idventa;
+				if($request->get('tdeuda')>0){
+				$recibo->tiporecibo='A'; }else{$recibo->tiporecibo='P'; }
+				$pago=explode("-",$idbanco[$contp]);
+				$recibo->idpago=$pago[0];
+				$recibo->idnota=0;
+				$recibo->idbanco=$idbanco[$contp];
+				$recibo->recibido=$denomina[$contp];			
+				$recibo->monto=$tmonto[$contp]; 
+				$recibo->referencia=$tref[$contp];
+				$recibo->tasap=$request->get('peso');
+				$recibo->tasab=$request->get('tc');
+				$recibo->aux=$request->get('tdeuda');
+				$recibo->fecha=$mytime->toDateTimeString();		
+				$recibo->usuario=$user;					
+				$recibo->save();
+		$mov=new Movbanco;
+        $mov->idcaja=$pago[0];
+        $mov->idempresa=$ide;
+		$mov->iddocumento=$recibo->idrecibo;
+        $mov->tipo_mov="N/C";
+		$mov->tipodoc="VENT";
+        $mov->numero=$pago[0]."-".$request->get('serie_comprobante');
+        $mov->concepto="Ingreso Ventas";
+		$mov->tipo_per="C";
+        $mov->idbeneficiario=$idcliente[0];
+		$mov->identificacion=$idcliente[5];
+        $mov->nombre=$idcliente[6];
+        $mov->monto=$denomina[$contp]; 
+		$mov->tasadolar=$tmonto[$contp];
+        $mytime=Carbon::now('America/Caracas');
+        $mov->fecha_mov=$mytime->toDateTimeString();
+        $mov->user=Auth::user()->name;
+        $mov->save();
+				 $contp=$contp+1;
+			  }  
+		   }
+		    
+        $idarticulo = $request -> get('idarticulo');
+        $cantidad = $request -> get('cantidad');
+        $precio = $request -> get('precio');
+        $precio_venta = $request -> get('precio');
+        $costoarticulo = $request -> get('costoarticulo');
+
+        $cont = 0;  $mcomi=0; $mcomiv=0;
+            while($cont < count($idarticulo)){
+			$articulo=Articulo::findOrFail($idarticulo[$cont]);
+            $detalle=new DetalleVenta();
+            $detalle->idventa=$venta->idventa;
+            $detalle->idempresa=$ide;
+            $detalle->idarticulo=$idarticulo[$cont];
+            $detalle->costoarticulo=$articulo->costo;
+            $detalle->cantidad=$cantidad[$cont];
+            $detalle->descuento=0;
+            $detalle->precio=$precio[$cont];
+            $detalle->precio_venta=$precio_venta[$cont];
+			 $detalle->fecha_emi=$mytime->toDateTimeString();	
+			 $detalle->fechahora=$mytime->toDateTimeString();	
+            $detalle->save();
+			
+			$stock=$articulo->stock;
+			$articulo->stock=$articulo->stock-$cantidad[$cont];
+			
+		$kar=new Kardex;
+		$kar->fecha=$mytime->toDateTimeString();
+		$kar->documento="VENT-".($numero+1);
+		$kar->idarticulo=$idarticulo[$cont];
+		$kar->cantidad=$cantidad[$cont];
+		$kar->exis_ant=$stock;
+		$kar->costo=$articulo->costo;
+		$kar->tipo=2; 
+		$kar->user=$user;
+		 $kar->save();  
+			 $deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$dep->id_deposito)		
+            ->where('idarticulo','=',$idarticulo[$cont])		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$cantidad[$cont]);
+					$exis->update();
+                      //actualizo stock   
+		//cimision 
+				
+//				
+        $articulo->update();
+            $cont=$cont+1;
+            }
+		
+		$cli=Pacientes::findOrFail($idcliente[0]);
+        $cli->ultventa=$mytime->toDateTimeString();
+        $cli->update();
+				$actv=Venta::findOrFail($venta->idventa);
+					if($modo->modop==0){
+						$actv->montocomision=$mcomiv;	
+					}else{
+						$actv->montocomision=$mcomi;	
+					}      		
+				$actv->update();
+
+	/*			DB::commit();
+ }
+catch(\Exception $e)
+{
+    DB::rollback();
+}*/
+
+	return Redirect::to('ventas/venta/'.$request->get('vpedido').'/edit');	
+	
+
+}
+    public function store(Request $request){
+	
+	$ide=Auth::user()->idempresa;
+	$modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
+	
+		$user=Auth::user()->name;
+		$nivel=Auth::user()->nivel;
+ /* try{
+  DB::beginTransaction();*/
+   $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->first();
+   if ($contador==NULL){$numero=0;}else{$numero=$contador->idventa;}
+//
 //registra la venta
     $venta=new Venta;
 	$idcliente=explode("_",$request->get('id_cliente'));
@@ -718,22 +891,24 @@ public function ver(Request $request, $id){
 	 $ide=Auth::user()->idempresa;
 	     $monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
 		 $rutas=DB::table('rutas')-> where('idempresa','=',$ide)->get();
-	     $vendedor=DB::table('vendedores')-> where('idempresa','=',$ide)->get();
-	     $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
+	     $vendedor=DB::table('vendedores')-> where('idempresa','=',$ide)->orderby('id_vendedor','asc')->first();
+	     $categorias=DB::table('categoria')-> where('idempresa','=',$ide)->get();
+	     $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first(); 
 		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')
 		->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')
-		-> where ('clientes.id_cliente','=',$idcliente)
-		->groupby('clientes.id_cliente')->get();
+		-> where ('clientes.idempresa','=',$ide)
+		->orderby('id_cliente','asc')
+		->groupby('clientes.id_cliente')->first();
          $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->get();
       //dd($contador);
-         $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
-        -> where('art.estado','=','Activo')
-		-> where('art.idempresa','=',$ide)
+      $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
+        -> select('art.nombre','art.idarticulo','art.idcategoria','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
+        ->where('art.idempresa','=',$ide)
+		-> where('art.estado','=','Activo')
         -> where ('art.stock','>','0')
-        ->groupby('articulo','art.idarticulo')
+        ->groupby('art.idarticulo')
         -> get();
-     return view("ventas.venta.create",["rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
+     return view("ventas.venta.createtouch",["categorias"=>$categorias,"rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
  }
 
 public function destroy($id){

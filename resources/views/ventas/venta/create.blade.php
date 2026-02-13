@@ -37,7 +37,9 @@ $idv=0;
 		
 	<div class="row" style="background-color:#f3f4f4"> 
 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-			<h3>Nueva Venta</h3>
+			<h3>Nueva Venta 
+			<a href="{{URL::action('VentaController@edit',1)}}"><i class="fa fa-fw fa-hand-pointer-o"></i> </a>
+			</h3>
 			@if (count($errors)>0)
 			<div class="alert alert-danger">
 				<ul>
