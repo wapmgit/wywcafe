@@ -37,8 +37,7 @@ $idv=0;
 		
 	<div class="row" style="background-color:#f3f4f4"> 
 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-			<h3>Nueva Venta 
-			<a href="{{URL::action('VentaController@edit',1)}}"><i class="fa fa-fw fa-hand-pointer-o"></i> </a>
+			<h3>Venta 	 <a href="{{URL::action('VentaController@edit',1)}}"><i class="fa fa-fw fa-tablet"></i> </a>		
 			</h3>
 			@if (count($errors)>0)
 			<div class="alert alert-danger">
@@ -49,16 +48,18 @@ $idv=0;
 				</ul>  
 			</div>
 			@endif
-			<button type="button" > <a id="calculo" href="" data-target="#modal_tasas" data-toggle="modal"> Referencia Monetaria </a></button>
+			
 			@include('ventas.venta.modal_tasas')
 			@include('ventas.venta.modalcliente')
 			<input type="hidden" value="{{$empresa->tc}}" id="valortasa" name="tc"></input>
 		  <input type="hidden" value="{{$empresa->peso}}" id="valortasap" name="peso"></input>
+
+		  <a id="calculo" href="" data-target="#modal_tasas" data-toggle="modal"> Ref. Monetaria </a>
         </div>
 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 		<h4 id="nombrevendedor"></h4>
 									    <div class="form-group">
-            			             <label for="tipo_precio">Vendedor </label><br>
+            			             <label for="tipo_precio">Vendedor</label><br>
             			<select name="vpedido" id="vpedido" class="form-control">
             				@foreach ($vendedores as $cat)
             				<option value="{{$cat->id_vendedor}}">{{$cat->nombre}}</option>
@@ -70,7 +71,7 @@ $idv=0;
             		</div>
 		</div>
 		
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 		<div class="small-box bg-green">
 		<div class="inner">
            <h1 id="muestramonto" align="center"><sup style="font-size: 25px"><?php ?>$   0.00</sup></h1>
@@ -78,7 +79,7 @@ $idv=0;
              
             </div>
 		</div>
-				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 		<div class="small-box bg-blue">
 		<div class="inner">
            <h1 id="muestramontobs" align="center"><sup style="font-size: 25px"><?php ?>Bs   0.00</sup></h1>
