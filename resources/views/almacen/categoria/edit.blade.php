@@ -23,9 +23,13 @@
             	<label for="descripcion">Descripción</label>
             	<input type="text" name="descripcion" class="form-control" value="{{$categoria->descripcion}}" placeholder="Descripción...">
             </div>
-			 <div class="form-group">
+			 <div class="form-group"  style="display:none">
             	<label for="descripcion">¿Es Licores?</label>
             <input type="checkbox" name="licores" id="cbox1" onclick="javascript:asignar();" value="0" />
+            </div>
+				 <div class="form-group">
+            	<label for="descripcion">¿Es Licores?</label>
+            <input type="checkbox" name="touch" id="cbox2" <?php if($categoria->tactil==1){ echo "checked"; } ?> value="0" onclick="javascript:asignart();" />
             </div>
             <div class="form-group">
             	<button class="btn btn-primary" type="submit">Guardar</button>
@@ -48,6 +52,14 @@ function asignar(){
 		$('#cbox1').val(1);
 	}else{
 		$('#cbox1').val(0);
+	};
+}
+function asignart(){	
+	var valor=document.getElementById('cbox2').checked; 
+	if(valor==true){
+		$('#cbox2').val(1);
+	}else{
+		$('#cbox2').val(0);
 	};
 }
 </script>

@@ -133,14 +133,15 @@ class CategoriaController extends Controller
 		return view("ventas.venta.create",["nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
     }
     }
-    public function store (CategoriaFormRequest $request)
+    public function store (Request $request)
     {
-		//dd($request);
 		$ide=Auth::user()->idempresa;
         $categoria=new Categoria;
         $categoria->nombre=$request->get('nombre');
+		$categoria->idempresa=$ide;
         $categoria->descripcion=$request->get('descripcion');
         $categoria->condicion='1';
+		$categoria->tactil=$request->get('touch'); 
 		$categoria->licor=$request->get('licores');
         $categoria->save();
         return Redirect::to('almacen/categoria');
@@ -171,6 +172,7 @@ class CategoriaController extends Controller
         $categoria->nombre=$request->get('nombre');
         $categoria->descripcion=$request->get('descripcion');
         $categoria->licor=$request->get('licores');
+		$categoria->tactil=$request->get('touch');
         $categoria->update();
         return Redirect::to('almacen/categoria');
     }

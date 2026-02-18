@@ -87,7 +87,7 @@ padding:5px;
 }
   </style> 	
 	<div class="row" style="background-color:#f3f4f4"> 
-		<div class="col-lg-12 col-md-21 col-sm-12 col-xs-12">
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 			<h3 align="center">Venta 
 			<a href="/ventas/venta/create"><i class="fa fa-fw fa-television"></i> </a>
 			</h3>
@@ -96,7 +96,7 @@ padding:5px;
 		  <input type="hidden" value="{{$cntcat}}" id="cntcat"></input>
 		  <input type="hidden" value="0" name="total_venta" id="totala"></input>
         </div>		
-	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 			<div class="small-box bg-green">
 			<div class="inner">
 			   <h1 id="muestramonto" align="center"><sup style="font-size: 25px"><?php ?>$   0.00</sup></h1>
@@ -104,7 +104,7 @@ padding:5px;
 				 
 				</div>
 	</div>
-	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 			<div class="small-box bg-blue">
 			<div class="inner">
 			   <h1 id="muestramontobs" align="center"><sup style="font-size: 25px"><?php ?>Bs   0.00</sup></h1>
@@ -113,7 +113,8 @@ padding:5px;
 				</div>
 	</div>
 	 @foreach ($categorias as $cat) <?php $concat++; ?>
-		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6" >
+		<div class="col-lg-3 col-md-3 col-sm-4 col-xs-6" >
+
 				<p> <button type="button" onclick="javascript:optcat({{$concat}});" class="btn btn-block btn-default btn-lg">{{$cat->nombre}}</button></p>
 		</div>  
 	@endforeach
@@ -191,11 +192,15 @@ padding:5px;
 		@endforeach
 		
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="opt-btn" style="display:none">		</br>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
-					<button type="button" id="detventa"  class="btn btn-block btn-default btn-lg">Detalle Venta</button>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+					<button type="button" id="detventa"  class="btn btn-block btn-info btn-lg">Detalle Venta</button>
+		
 			</div>  
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
-					<button type="button" id="btnprocesar" class="btn btn-block btn-default btn-lg">Procesar</button>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+				<button type="button" id="clearventa" class="btn btn-block btn-danger btn-lg">Limpiar</button>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+					<button type="button" id="btnprocesar" class="btn btn-block btn-primary btn-lg">Procesar</button>
 			</div>
 		</div>
 	</div>
@@ -216,8 +221,8 @@ padding:5px;
 				  </div>
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></br>
-				<button type="button" id="backventa" class="btn btn-block btn-default btn-lg">Regresar</button>
-				<button type="button" id="btntotalizar" class="btn btn-block btn-default btn-lg">Totalizar</button>
+				<button type="button" id="backventa" class="btn btn-block btn-danger btn-lg">Regresar</button>
+				<button type="button" id="btntotalizar" class="btn btn-block btn-primary btn-lg">Totalizar</button>
 			</div>
 			</div>
 			
@@ -349,6 +354,26 @@ $(document).ready(function(){
 		document.getElementById('detarticulos').style.display="none";	
 		for(var i=0;i<10;i++){
 		$("#filapago" + i).remove(); acumpago[i]=0;}
+	})
+	$('#clearventa').click(function(){
+		var mntf=0;	
+		total=0;
+		var jsArray = <?php echo json_encode($articulos); ?>;
+				for (i = 0; i < jsArray.length; i++) {  
+		     $("#fila"+i).remove();
+			 $("#cnt"+idartarray[i]).val(0);
+			$("#cntlabel"+idartarray[i]).html("0");
+			$("#btnless"+idartarray[i]).attr('disabled',true);
+			$("#mntlabel"+idartarray[i]).html("$ " +mntf.toFixed(2));
+			 }
+		$("#resta").val(mntf);   
+        $("#tdeuda").val(mntf);  
+		$("#totalab").val(mntf);
+		$("#totala").val(mntf);
+		$("#divtotal").val(mntf);
+		$("#total_abono").text("0.0");
+		$("#muestramonto").html(" $  : " + mntf.toFixed(2));
+		$("#muestramontobs").html(" Bs  : " + mntf.toFixed(2));
 	})
 });
    function mediopago(){

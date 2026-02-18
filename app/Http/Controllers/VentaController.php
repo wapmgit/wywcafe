@@ -892,7 +892,7 @@ public function ver(Request $request, $id){
 	     $monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
 		 $rutas=DB::table('rutas')-> where('idempresa','=',$ide)->get();
 	     $vendedor=DB::table('vendedores')-> where('idempresa','=',$ide)->orderby('id_vendedor','asc')->first();
-	     $categorias=DB::table('categoria')-> where('idempresa','=',$ide)->get();
+	     $categorias=DB::table('categoria')-> where('idempresa','=',$ide)->where('tactil','=',1)->get();
 	     $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first(); 
 		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')
 		->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')
@@ -900,7 +900,7 @@ public function ver(Request $request, $id){
 		->orderby('id_cliente','asc')
 		->groupby('clientes.id_cliente')->first();
          $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->get();
-      //dd($contador);
+      //dd($personas);
       $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
         -> select('art.nombre','art.idarticulo','art.idcategoria','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
         ->where('art.idempresa','=',$ide)
