@@ -28,7 +28,7 @@
             <input type="checkbox" name="licores" id="cbox1" onclick="javascript:asignar();" value="0" />
             </div>
 				 <div class="form-group">
-            	<label for="descripcion">¿Es Licores?</label>
+            	<label for="descripcion">¿Touch?</label>
             <input type="checkbox" name="touch" id="cbox2" <?php if($categoria->tactil==1){ echo "checked"; } ?> value="0" onclick="javascript:asignart();" />
             </div>
             <div class="form-group">
