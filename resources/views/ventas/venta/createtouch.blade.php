@@ -174,7 +174,8 @@ padding:5px;
 					  <p class="price"> $ {{$det->precio_promedio}}</p>
 					  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
 						<button class="buttonplus"  onclick="javascript:addcnt({{$det->idarticulo}},{{$det->precio_promedio}});" type="button">+</button>
-					  </div>
+					   <input type="hidden" value="{{$det->stock}}" id="stock{{$det->idarticulo}}"></input>
+					 </div>
 					   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
 						<label class="price"id="cntlabel{{$det->idarticulo}}">0</label>
 						<input type="hidden" value="0" id="cnt{{$det->idarticulo}}"></input>
@@ -499,7 +500,9 @@ document.getElementById(cont).style.display="";
 function addcnt(id,price){
 	totalventa=$("#totala").val();
 	cntart=$("#cnt"+id).val();
+	stock=$("#stock"+id).val();
 	cntart++;
+		if(cntart<=stock){
 		$("#cnt"+id).val(cntart);
 		$("#cntlabel"+id).html(cntart);
 		var mntf=parseFloat(price)*parseFloat(cntart);
@@ -515,6 +518,7 @@ function addcnt(id,price){
 	cntarray[index]=cntart;
 	idartarray[index]=id;
 	$("#totala").val(total);
+
 		if (existeFila(index)) {
 			$("#cantidad"+index).val(cntart);
 			$("#precio_venta"+index).val(mntf);
@@ -525,6 +529,10 @@ function addcnt(id,price){
 		document.getElementById('opt-btn').style.display=""; 
 		$("#divtotal").val(total);
 		$("#resta").val(total);
+	}else{
+		cntart--;
+		alert('Stock Insuficiente..');
+	}
 	}
 	function lesscnt(id,price){
 	totalventa=$("#totala").val();
