@@ -69,6 +69,7 @@ class VentaController extends Controller
 		$ide=Auth::user()->idempresa;
 		$nivel=Auth::user()->nivel;
 		  $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
+		  $rol=DB::table('roles')-> select('cambiarprecioventa')->where('iduser','=',$request->user()->id)->first();	
 		if($nivel=="A"){
 		$monedas=DB::table('monedas')->where('idempresa','=',$ide)->get();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
@@ -105,7 +106,7 @@ class VentaController extends Controller
         //dd($articulos);
 		if ($contador==""){$contador=0;}
 		}
-      return view("ventas.venta.create",["nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
+      return view("ventas.venta.create",["rol"=>$rol,"nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
     }
     public function ventasave(Request $request){
 		$ide=Auth::user()->idempresa;
@@ -280,7 +281,7 @@ catch(\Exception $e)
 
 }
     public function store(Request $request){
-	
+	//dd($request);
 	$ide=Auth::user()->idempresa;
 	$modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
 	
@@ -435,6 +436,7 @@ catch(\Exception $e)
         $cantidad = $request -> get('cantidad');
         $descuento = $request -> get('descuento');
         $precio = $request -> get('precio');
+        $tprecio = $request -> get('tprecio');
         $precio_venta = $request -> get('precio_venta');
         $costoarticulo = $request -> get('costoarticulo');
         $eslicor = $request -> get('eslicor');
@@ -447,6 +449,7 @@ catch(\Exception $e)
 					$detalle->costoarticulo=$costoarticulo[$cont];
 					$detalle->cantidad=$cantidad[$cont];
 					$detalle->descuento=$descuento[$cont];
+	
 					$detalle->precio_venta=$precio_venta[$cont];
 					 $detalle->fecha_emi=$request->get('fecha_emi');	
 					$detalle->save();
@@ -462,6 +465,7 @@ catch(\Exception $e)
             $detalle->costoarticulo=$costoarticulo[$cont];
             $detalle->cantidad=$cantidad[$cont];
             $detalle->descuento=$descuento[$cont];
+            $detalle->tprecio=$tprecio[$cont];
             $detalle->precio=$precio[$cont];
             $detalle->precio_venta=$precio_venta[$cont];
 			 $detalle->fecha_emi=$request->get('fecha_emi');	
@@ -986,12 +990,15 @@ public function devolucion(){
 	 public function refrescar(Request $request)
     {
 		if($request->ajax()){
-        $articulos =DB::table('articulo as art')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2')
-        -> where('art.estado','=','Activo')
+			$ide=Auth::user()->idempresa;
+  $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
+        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
+        ->where('art.idempresa','=',$ide)
+		-> where('art.estado','=','Activo')
         -> where ('art.stock','>','0')
         ->groupby('articulo','art.idarticulo')
         -> get();
+
            return response()->json($articulos);
 		}
     }

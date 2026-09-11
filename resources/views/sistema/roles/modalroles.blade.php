@@ -142,6 +142,12 @@ role="dialog" tabindex="-1" id="roles{{$q->id}}">
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 					 <div class="form-group">
+					 <label>Modificar Precio Venta: </label><label>
+					  <input type="checkbox" name="op59" class="minimal" @if($q->cambiarprecioventa==1) checked @endif ></label>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					 <div class="form-group">
 					 <label>Crear Forma Libre: </label><label>
 					  <input type="checkbox" name="op45" class="minimal" @if($q->crearfl==1) checked @endif ></label>
 					</div>

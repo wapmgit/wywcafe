@@ -176,7 +176,7 @@ $idv=0;
 
                       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
                     <div class="form-group">
-                        <label for="precio_venta">Precio venta</label>
+                        <label for="precio_venta">Precio venta  <?php if ($rol->cambiarprecioventa==1){?><i class="fa fa-fw fa-dollar" id="changeprice"></i><?php } ?><span id="nprecioventa"></span></label>
                         <input type="number" name="pprecio_venta" id="pprecio_venta"  class ="form-control" placeholder="Precio Venta" <?php if ($nivel=="L"){?> disabled <?php }  ?> >
                     </div>
                     </div>
@@ -491,6 +491,20 @@ var count =document.getElementById('id_cliente').options.length;
 				}    
 			});
 		});
+	$("#changeprice").on("click",function(){
+	  datosarticulo=document.getElementById('pidarticulo').value.split('_');
+		var p1=datosarticulo[2]; 
+		var p2=datosarticulo[3]; 
+		var p3=datosarticulo[4]; 
+	  if(preopt==="P1"){  preopt="P2"; $("#pprecio_venta").val(p2);  }
+	  else{
+	  if(preopt==="P2"){  preopt="PC"; $("#pprecio_venta").val(p3);  }else{
+	  if(preopt==="PC"){  preopt="P1"; $("#pprecio_venta").val(p1); }
+	  }
+	  }
+	  $("#nprecioventa").html(preopt);
+	  
+	});
 });
 	function validar(e){
 		let tecla = (document.all) ? e.keyCode : e.which;
@@ -540,8 +554,11 @@ var count =document.getElementById('id_cliente').options.length;
     function mostrarvalores(){      
       tipo_precio=document.getElementById('id_cliente').value.split('_');
       var tpcc= tipo_precio[1];
-      if (tpcc==1){ tpc=2;} if ( tpcc==2 ){ tpc=3; } if ( tpcc==3 ){ tpc=4; }
+      if (tpcc==1){   preopt="P1"; tpc=2;} 
+	  if ( tpcc==2 ){ preopt="P2"; tpc=3; } 
+	  if ( tpcc==3 ){  preopt="PC"; tpc=4; }
       //de los articulos
+	   $("#nprecioventa").html(preopt);	 
 	    document.getElementById('pcantidad').focus();
       datosarticulo=document.getElementById('pidarticulo').value.split('_');
       $("#pprecio_venta").val(datosarticulo[tpc]);
@@ -551,6 +568,7 @@ var count =document.getElementById('id_cliente').options.length;
       $("#pcantidad").attr("step",datosarticulo[7]);
       $("#pdescuento").val("0");
     }
+
 	function mostrarcomision(){ 
 		$("#montonc").val(0);	
 		$("#notnc").html('');
@@ -661,7 +679,7 @@ var count =document.getElementById('id_cliente').options.length;
                 total=parseFloat(total)+parseFloat(subtotal[cont].toFixed(2));
                 totalc=parseFloat(totalc)+parseFloat(subtotalc[cont].toFixed(2));
 
-             var fila='<tr class="selected" id="fila'+cont+'" ><td><button class="btn btn-warning btn-xs"  onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" name="cantidad[]" readonly="true" style="width: 60px" value="'+cantidad+'"></td><td><input type="number" name="precio[]" readonly="true" style="width: 60px" value="'+precio+'"></td><td><input type="number"  name="descuento[]" readonly="true" style="width: 80px" value="'+descuento+'"></td><td><input type="number" readonly="true" style="width: 80px" name="precio_venta[]" value="'+precio_venta+'"></td><td>'+subtotal[cont].toFixed(2)+'<input type="hidden" name="costoarticulo[]" readonly="true" value="'+costoarticulo+'"><input type="hidden" name="eslicor[]"  value="'+licor[cont]+'"></td></tr>';
+             var fila='<tr class="selected" id="fila'+cont+'" ><td><button class="btn btn-warning btn-xs"  onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" name="cantidad[]" readonly="true" style="width: 60px" value="'+cantidad+'"></td><td>'+preopt+'<input type="hidden" name="tprecio[]"  value="'+preopt+'"><input type="number" name="precio[]" readonly="true" style="width: 60px" value="'+precio+'"></td><td><input type="number"  name="descuento[]" readonly="true" style="width: 80px" value="'+descuento+'"></td><td><input type="number" readonly="true" style="width: 80px" name="precio_venta[]" value="'+precio_venta+'"></td><td>'+subtotal[cont].toFixed(2)+'<input type="hidden" name="costoarticulo[]" readonly="true" value="'+costoarticulo+'"><input type="hidden" name="eslicor[]"  value="'+licor[cont]+'"></td></tr>';
               cont++;   
 			  contl++;
 			  evaluar();   

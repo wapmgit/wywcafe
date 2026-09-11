@@ -133,6 +133,7 @@ class SistemaController extends Controller
 		if ($request->get('op56')){ $data->resumeng=1; }else{$data->resumeng=0; }       
 		if ($request->get('op57')){ $data->edoctabanco=1; }else{$data->edoctabanco=0; }       
 		if ($request->get('op58')){ $data->rinventario=1; }else{$data->rinventario=0; }       
+		if ($request->get('op59')){ $data->cambiarprecioventa=1; }else{$data->cambiarprecioventa=0; }       
 		$data ->update();
 
 	

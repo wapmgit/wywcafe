@@ -101,6 +101,7 @@ class CategoriaController extends Controller
 		
         return view('almacen.categoria.grafico',["vene"=>$vene,"vfeb"=>$vfeb,"vmar"=>$vmar,"vabr"=>$vabr,"vmay"=>$vmay,"vjun"=>$vjun,"vjul"=>$vjul,"vago"=>$vago,"cene"=>$cene,"cfeb"=>$cfeb,"cmar"=>$cmar,"cmay"=>$cmay,"cabr"=>$cabr,"cjun"=>$cjun,"cjul"=>$cjul,"cago"=>$cago,"csep"=>$csep,"vsep"=>$vsep,"voct"=>$voct,"coct"=>$coct,"vnov"=>$vnov,"cnov"=>$cnov,"vdic"=>$vdic,"cdic"=>$cdic,"empresa"=>$empresa,"clientes"=>$clientes,"proveedor"=>$proveedor,"articulo"=>$articulos,"vendedores"=>$vendedores]);
     } else {
+		$rol=DB::table('roles')-> select('cambiarprecioventa')->where('iduser','=',Auth::user()->id)->first();	
 		$idvende=Auth::user()->vendedor;
 		$depvend=DB::table('depvendedor')->select('id_deposito')->where('idvendedor','=',$idvende)->first();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
@@ -130,7 +131,7 @@ class CategoriaController extends Controller
     ->get();
         //dd($articulos);
 		if ($contador==""){$contador=0;}
-		return view("ventas.venta.create",["nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
+		return view("ventas.venta.create",["rol"=>$rol,"nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);
     }
     }
     public function store (Request $request)
