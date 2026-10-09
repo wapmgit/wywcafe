@@ -38,6 +38,7 @@
             	 <div class="form-group">
             			<label >Materia Prima/stock</label>
             			<select name="mprima" id="mprima" class="form-control">
+						<option value="0">Seleccione...</option>
             				@foreach ($materia as $cat)
             				<option value="{{$cat->idarticulo}}">{{$cat->nombre}}-{{$cat->stock}}</option>
             				@endforeach
@@ -48,9 +49,9 @@
 		<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
             	 <div class="form-group">
             			<label >Maquina</label>
-            			<select name="maquina" class="form-control">
+            			<select name="maquina" id="maquina" class="form-control">
             				@foreach ($maquina as $c)
-            				<option value="{{$c->iddep}}">{{$c->nombre}}</option>
+            				<option value="{{$c->iddep}}">{{$c->nombre}}-{{$c->capacidad}}</option>
             				@endforeach
             			</select>
             			
@@ -132,10 +133,15 @@
 <script>
 $(document).ready(function(){
 	$("#cochas").on("change",function(){
-		$("#kgs").val($("#cochas").val()*35);
+			datosm= $("#maquina option:selected").text();
+		var datm= datosm.split('-');
+		$("#kgs").val($("#cochas").val()*datm[1]);
 		var kgs=$("#kgs").val();
 			datos= $("#mprima option:selected").text();
 		var dat= datos.split('-');
+		if($("#mprima").val()==0){ alert('Debe Selecionar Materi Prima'); 
+			$("#kgs").val(0);
+			$("#cochas").val(0); }else{
       var kgstock=dat[1];
 		if(parseFloat(kgs) > parseFloat(kgstock)){
 			alert('No Posee suficiente Stock');
@@ -143,13 +149,14 @@ $(document).ready(function(){
 			$("#cochas").val(0);
 			$("#cochas").focus();
 		}
+		}
 	})	
 	$("#kgt").on("change",function(){		
 		var kgt=$("#kgt").val();
 		var kgs=$("#kgs").val();
 		var ope=(100-((kgt*100)/kgs)).toFixed(2);		
 		$("#reduccion").val(ope);
-		if(kgs>kgt){
+		if(kgs>=kgt){
 		var ope=(100-((kgt*100)/kgs)).toFixed(2);		
 		$("#reduccion").val(ope);	
 		}else{

@@ -89,7 +89,7 @@ class VentaController extends Controller
 		//dd($articulos);
      if ($contador==""){$contador=0;}
 		}else{
-			$idvende=Auth::user()->vendedor;
+		$idvende=Auth::user()->vendedor;
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
 		$monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
 		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')-> where('clientes.idempresa','=',$ide)-> where('clientes.vendedor','=',$idvende)-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
@@ -988,17 +988,28 @@ public function devolucion(){
         }
     } 
 	 public function refrescar(Request $request)
-    {
+    { 
 		if($request->ajax()){
-			$ide=Auth::user()->idempresa;
-  $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
-        ->where('art.idempresa','=',$ide)
-		-> where('art.estado','=','Activo')
-        -> where ('art.stock','>','0')
-        ->groupby('articulo','art.idarticulo')
-        -> get();
-
+			$dep=Auth::user()->vendedor;
+	$articulos = DB::table('articulo as a')
+    ->join('existencia as ex', 'ex.idarticulo', '=', 'a.idarticulo')
+    ->selectRaw('CONCAT(a.codigo, " ", a.nombre) as articulo') // Más limpio que DB::raw
+    ->addSelect([
+        'a.idarticulo',
+        'ex.existencia as stock',
+        'a.costo',
+        'a.precio1 as precio_promedio',
+        'a.precio2',
+        'ex.id_almacen',
+        'a.iva',
+        'a.fraccion',
+        'a.mprima as licor'
+    ])
+    ->where('a.estado', 'Activo')
+    ->where('a.sevende', '1')
+    ->where('ex.id_almacen', $dep)
+    ->where('ex.existencia', '>', 0)
+    ->get();
            return response()->json($articulos);
 		}
     }

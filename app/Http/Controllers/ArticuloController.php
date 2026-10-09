@@ -64,7 +64,7 @@ class ArticuloController extends Controller
     }
  public function store (ArticuloFormRequest $request)
     {
-	
+
 		$ide=Auth::user()->idempresa;
         $validar=$request->get('codigo');
           try{
@@ -92,7 +92,7 @@ class ArticuloController extends Controller
 		$articulo->clase=$request->get('clase');
         $articulo->origen=$request->get('origen');
         if($request->get('nivelp')){$articulo->mprima=$request->get('mprima'); }else{ $articulo->mprima=0;}
-        	if($request->get('nivelp')){ $articulo->nivelp=$request->get('nivelp'); }else{ $articulo->nivelp=0;}
+        if($request->get('nivelp')){ $articulo->nivelp=$request->get('nivelp'); }else{ $articulo->nivelp=0;}
         //validar iva vacio
         $articulo->iva=$request->get('impuesto');
 		$articulo->fraccion=$request->get('fraccion');
@@ -174,7 +174,7 @@ catch(\Exception $e)
     }
     public function update(ArticuloFormRequest $request,$id)
     {
-	//	dd($request);
+		//dd($request);
         $articulo=Articulo::findOrFail($id);
        $articulo->idcategoria=$request->get('idcategoria');
         $articulo->codigo=$request->get('codigo');

@@ -89,6 +89,7 @@
             	 <div class="form-group">
             			<label for="nivelp">Nivel Produccion </label>          
                  <select name="nivelp" id="nivelp" class="form-control" <?php if($articulo->nivelp == 0){ echo "disabled"; } ?>>          			            			
+            				<option <?php if($articulo->nivelp==0){ echo "selected"; } ?> value="0"></option>
             				<option <?php if($articulo->nivelp==1){ echo "selected"; } ?> value="1">Tostado</option>
             				<option <?php if($articulo->nivelp==2){ echo "selected"; } ?>value="2">Molido</option>
             				<option <?php if($articulo->nivelp==3){ echo "selected"; } ?>value="3">Empaquetado</option>  							
