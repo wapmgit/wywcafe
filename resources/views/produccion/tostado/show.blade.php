@@ -3,7 +3,7 @@
 <?php
 $ceros=5;
 function add_ceros($numero,$ceros) {
-  $numero=$numero+1;
+  $numero=$numero;
 $digitos=strlen($numero);
   $recibo=" ";
   for ($i=0;$i<8-$digitos;$i++){
@@ -21,7 +21,7 @@ return $insertar_ceros = $recibo.$numero;
 	    </div>
 		<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
 		<h3 align="center"> PRODUCCION <?php echo add_ceros($det->idt,$ceros); ?></h3>
-		<h4 align="center"> Tostado</h4>
+		<h4 align="center"> Tostado <?php if($det->devolu==1) echo "*Anulado*"; ?></h4>
 		</div>
 		<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 		        <table id="detalles" width="90%">

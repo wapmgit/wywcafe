@@ -72,6 +72,7 @@ class ProduccionController extends Controller
         $categoria=new Ptostado;
         $categoria->idempresa=$ide;
         $categoria->tostador=$request->get('tostador');
+        $categoria->idmaquina=$request->get('maquina');
         $categoria->cochas=$request->get('cochas');
         $categoria->idmprima=$request->get('mprima');
         $categoria->kgmprima=$request->get('kgsubidos');
@@ -336,4 +337,74 @@ class ProduccionController extends Controller
 		 
         return view("produccion.molida.show",["det"=>$det,"data"=>$data,"empresa"=>$empresa]);
     }
+	public function destroy(Request $request){
+		
+		$user=Auth::user()->name;
+		$ide=Auth::user()->idempresa;
+        $produ=Ptostado::findOrFail($request->get('idtostado'));
+		$produ->devolu=1;
+        $produ->update();
+		$depo=DB::table('depvendedor')->select('id_deposito','idvendedor')
+            ->where('idempresa','=',$ide)
+			->orderBy('id_deposito','asc')			
+            ->first(); 
+		$mytime=Carbon::now('America/Caracas');
+		//	dd($produ);
+		//reg tostador
+		$tost=Tostador::findOrFail($produ->tostador);
+		$tost->kg=$tost->kg-$produ->kgcomi;
+		$tost->pendiente=$tost->pendiente-$produ->kgcomi;
+		$tost->update();
+		$dep=Depmaquina::findOrFail($produ->idmaquina);
+		$dep->kg=$dep->kg-$produ->kgcomima;
+		$dep->pendiente=$dep->pendiente-$produ->kgcomima;
+		$dep->update();
+		//sale
+		$articulo=Articulo::findOrFail($produ->idmprima);
+		$stock=$articulo->stock;
+		$articulo->stock=$articulo->stock+$produ->kgmprima;
+		$articulo->update();		
+		$kar=new Kardex;
+		$kar->fecha=$mytime->toDateTimeString();
+		$kar->documento="DPRODT-".$produ->idt;
+		$kar->idarticulo=$produ->idmprima;
+		$kar->cantidad=$produ->kgmprima;
+		$kar->exis_ant=$stock;
+		$kar->costo=$articulo->costo;
+		$kar->tipo=1; 
+		$kar->user=$user;
+		$kar->save();
+			$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$produ->idmprima)		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia+$produ->kgmprima);
+					$exis->update();
+		//entra
+		$articulo=Articulo::findOrFail($produ->idproducto);
+		$stock=$articulo->stock;
+		$articulo->stock=$articulo->stock-$produ->kgtostado;
+		$articulo->update();
+		$kar=new Kardex;
+		$kar->fecha=$mytime->toDateTimeString();
+		$kar->documento="DPRODT-".$produ->idt;
+		$kar->idarticulo=$produ->idproducto;
+		$kar->cantidad=$produ->kgtostado;
+		$kar->exis_ant=$stock;
+		$kar->costo=$articulo->costo;
+		$kar->tipo=2; 
+		$kar->user=$user;
+		$kar->save();
+			$deposito=DB::table('existencia')->select('id')
+            ->where('idempresa','=',$ide)
+            ->where('id_almacen','=',$depo->id_deposito)		
+            ->where('idarticulo','=',$produ->idproducto)		
+            ->first();
+					$exis=Existencia::findOrFail($deposito->id);
+					$exis->existencia=($exis->existencia-$produ->kgtostado);
+					$exis->update();
+        return Redirect::to('produccion/tostado');
+	}
 }

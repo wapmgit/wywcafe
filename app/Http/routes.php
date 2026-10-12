@@ -239,6 +239,7 @@ Route::resource('rutas/rutas','RutasController');
 //produccion
 Route::resource('produccion/tostado','ProduccionController@indext');
 Route::resource('tostado/create','ProduccionController@createt');
+Route::resource('tostado/anular','ProduccionController@destroy');
 Route::resource('/produccion/tostado/save','ProduccionController@savetostado');
 Route::resource('/produccion/molida/save','ProduccionController@savemolida');
 Route::resource('/tostado/detalle','ProduccionController@dettostado');
