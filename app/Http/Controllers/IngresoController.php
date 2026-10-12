@@ -311,7 +311,7 @@ public function destroy(Request $request, $id){
     $ingreso=new devolucionCompras;
     $ingreso->idcompra=$id;
     $ingreso->idempresa=$ide;
-    $mytime=Carbon::now('America/Lima');
+    $mytime=Carbon::now('America/Caracas');
     $ingreso->fecha_hora=$mytime->toDateTimeString();
 	$ingreso->usuario=$user;
     $ingreso-> save();

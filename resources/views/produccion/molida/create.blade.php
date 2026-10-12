@@ -140,7 +140,7 @@ $(document).ready(function(){
 	$("#kgt").on("change",function(){		
 		var kgt=$("#kgt").val();
 		var kgs=$("#kgs").val();
-		if(parseFloat(kgs)>parseFloat(kgt)){
+		if(parseFloat(kgs)>=parseFloat(kgt)){
 		var ope=(100-((kgt*100)/kgs)).toFixed(2);		
 		$("#reduccion").val(ope);
 		$("#kgdif").val(kgt);		
