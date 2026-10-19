@@ -87,12 +87,12 @@
             </div>
 		<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
             	 <div class="form-group">
-            			<label for="nivelp">Nivel Produccion </label>          
+            			<label for="nivelp">Nivel Produccion</label>          
                  <select name="nivelp" id="nivelp" class="form-control" <?php if($articulo->nivelp == 0){ echo "disabled"; } ?>>          			            			
             				<option <?php if($articulo->nivelp==0){ echo "selected"; } ?> value="0"></option>
             				<option <?php if($articulo->nivelp==1){ echo "selected"; } ?> value="1">Tostado</option>
-            				<option <?php if($articulo->nivelp==2){ echo "selected"; } ?>value="2">Molido</option>
-            				<option <?php if($articulo->nivelp==3){ echo "selected"; } ?>value="3">Empaquetado</option>  							
+            				<option <?php if($articulo->nivelp==2){ echo "selected"; } ?> value="2">Molido</option>
+            				<option <?php if($articulo->nivelp==3){ echo "selected"; } ?> value="3">Empaquetado</option>  							
             			</select>        			
             		</div>
             </div>
@@ -123,7 +123,7 @@
 									<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
             	 <div class="form-group">
             			<label for="codigo">Peso (Gms)</label>
-            			<input type="number" name="peso"  min="0.1" required value="{{$articulo->peso}}" class="form-control">
+            			<input type="number" name="peso"  min="0.1" required value="{{$articulo->pesogr}}" class="form-control">
             		</div>
             </div>
 						  <!--			<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
