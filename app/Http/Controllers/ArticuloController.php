@@ -174,7 +174,7 @@ catch(\Exception $e)
     }
     public function update(ArticuloFormRequest $request,$id)
     {
-		dd($request);
+		//dd($request);
         $articulo=Articulo::findOrFail($id);
        $articulo->idcategoria=$request->get('idcategoria');
         $articulo->codigo=$request->get('codigo');
