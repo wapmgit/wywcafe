@@ -32,10 +32,10 @@
 				$iddoc=$data[1];					?>
 				<td><?php  echo  $fecha=date_format(date_create($compra->fecha),'d-m-Y h:i:s');?></td>
 				<td><?php  if($doc=="VENT"){ ?>
-				<a href="/almacen/articulo/detallekardex/{{$iddoc}}_{{$articulo->idarticulo}}">{{$compra->documento}}</a>
+				<a href="/almacen/articulo/detallekardex/{{$compra->iddoc}}_{{$articulo->idarticulo}}">{{$compra->documento}}</a>
 				<?php }
 				 if($doc=="AJUS"){ ?>
-				<a href="/almacen/articulo/detallekardexajuste/{{$iddoc}}_{{$articulo->idarticulo}}">{{$compra->documento}}</a>
+				<a href="/almacen/articulo/detallekardexajuste/{{$compra->iddoc}}_{{$articulo->idarticulo}}">{{$compra->documento}}</a>
 				<?php }else{ echo $compra->documento; } ?></td>
 				<td> <?php  if($compra->tipo == 1){ $entra=$entra+ $compra->cantidad; ?>{{ $compra->cantidad}}<?php } ?></td>
 				<td> <?php  if($compra->tipo == 2){ $sale=$sale+ $compra->cantidad;?>{{ $compra->cantidad}}<?php } ?></td>

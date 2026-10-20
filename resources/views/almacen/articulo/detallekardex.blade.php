@@ -35,7 +35,7 @@ $ceros=5;  $acumnc=0;
                         @foreach($detalles as $det)
 						<?php if($det->idarticulo != 999999){ ?>
                         <tr <?php if($det->idarticulo == $articulo){ echo "style='background-color: #E8F8F5'"; } ?>>
-                          <td>{{$det->articulo}}</td>
+                          <td>{{$det->articulo}} {{$det->unidad}}</td>
                           <td>{{$det->cantidad}}</td>
                           <td>{{$det->descuento}}</td>
                           <td><?php echo number_format( $det->precio_venta, 2,',','.'); ?></td>

@@ -165,7 +165,55 @@
 				 </div>
 				 </div>
 				
-                        
+                              <!-- Productos Agrupados -->
+            <div class="card card-info card-outline">
+                <div class="card-header">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="usap" id="cbx4" value="0" >
+                        <label class="form-check-label font-weight-bold" for="cbx4">¿Es un Producto Agrupado / Presentaciones?</label>
+                    </div>
+                </div>
+                <div class="card-body" id="tagrupado" style="display:none">
+                    <div class="row align-items-end mb-3 bg-light p-2 rounded">
+                        <div class="col-md-3 form-group mb-0">
+                            <label>Nombre Presentación</label>
+                            <input type="text" id="ngrupo" class="form-control form-control-sm" placeholder="Ej: Pack x 6">
+                        </div>
+                        <div class="col-md-2 form-group mb-0">
+                            <label>Cantidad</label>
+                            <input type="number" id="cantidadg" min="0" class="form-control form-control-sm" placeholder="Cant.">
+                        </div>
+                        <div class="col-md-2 form-group mb-0">
+                            <label>Utilidad (%)</label>
+                            <input type="number" id="utilg" min="0" class="form-control form-control-sm" placeholder="%">
+                        </div>
+                        <div class="col-md-3 form-group mb-0">
+                            <label>Precio</label>
+                            <input type="number" id="preciog" min="0" class="form-control form-control-sm" placeholder="Precio">
+                        </div>
+                        <div class="col-md-2 form-group mb-0">
+                            <button type="button" id="bt_grp" class="btn btn-info btn-sm btn-block">
+                                <i class="fa fa-plus-circle"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover text-center" id="detalles_out">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                    <th>Utilidad (%)</th>
+                                    <th>Precio Venta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>      
                         
           
  			 <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
@@ -183,6 +231,10 @@
             @push('scripts')
 			<script>
 $(document).ready(function(){
+	    $('#bt_grp').click(function(){   
+        agregar();  
+    });
+	 $("#utilg").change(calculog); 
 	 $("#nivelp").val(0);
       $("#codigo").on("change",function(){
 		  	var nuevo=$("#codigo").val();
@@ -231,6 +283,15 @@ $(document).ready(function(){
          $("#cbx2").val(0);
        }
    });
+       $("#cbx4").click(function() {
+        if ($(this).is(":checked")){
+            $("#cbx4").val(1);
+            $('#tagrupado').slideDown(); 
+        } else {
+            $("#cbx4").val(0);
+            $('#tagrupado').slideUp();
+        }
+    });
 	$("#cbxv").click(function() {
        if ($(this).is(":checked")){
         $("#cbxv").val(1);
@@ -240,7 +301,7 @@ $(document).ready(function(){
        }
    });
 	$("#cbx3").click(function() {
-		alert();
+
        if ($(this).is(":checked")){
        const element = document.getElementById('nivelp'); 
 		element.disabled = false;
@@ -252,6 +313,35 @@ $(document).ready(function(){
        }
    });
 })
+var cont = 0;
+
+function agregar(){
+    var gnombre = $("#ngrupo").val();
+    var gcantidad = $("#cantidadg").val();
+    var gutil = $("#utilg").val();
+    var gprecio = $("#preciog").val();
+
+    if (gnombre !== "" && gcantidad !== "" && gprecio !== "" && gutil !== ""){          
+        var fila = '<tr class="selected">' +
+            '<td><input type="hidden" name="vidgrupo[]" value="0"><input type="text" class="form-control form-control-sm" name="vngrupo[]" value="'+gnombre+'"></td>' +
+            '<td><input type="number" class="form-control form-control-sm text-center" name="vgcant[]" value="'+gcantidad+'"></td>' +
+            '<td><input type="number" class="form-control form-control-sm text-center" name="vgutil[]" value="'+gutil+'"></td>' +
+            '<td><input type="number" class="form-control form-control-sm text-center" name="vgpre[]" value="'+gprecio+'"></td>' +
+            '</tr>';
+        cont++;
+        limpiar();
+        $('#detalles_out').append(fila);
+    } else {
+        alert("Error al ingresar los datos de la presentación");
+    }
+}
+
+function limpiar(){
+    $("#cantidadg").val("");
+    $("#utilg").val("");
+    $("#ngrupo").val("");
+    $("#preciog").val("");
+}
 $("#utilidad").change(calculo);
 $("#util2").change(calculo2);
 $("#precio1").change(reverso); 
@@ -311,6 +401,18 @@ $("#nombre").change(revisar);
   //      alert(nv);
       $("#utilidad").val(parseFloat(nv));
       }
+	  function calculog(){
+    var mutil = $("#mutil").val();
+    $("#preciog").val("");
+    var costo = $("#costo").val() * $("#cantidadg").val();
+    var impuesto = $("#impuesto").val();
+    var utilidad = $("#utilg").val();  alert(costo);
+    var p1 = parseFloat(utilidad / 100);
+    var p2 = (mutil == 1) ? (parseFloat(costo) + parseFloat(p1 * costo)) : (costo / ((100 - utilidad) / 100));
+    var iva = p2 * (impuesto / 100);
+    var pt = trunc(parseFloat(p2) + parseFloat(iva), 2);
+    $("#preciog").val(pt);
+}
 	  function revisar(){
 	var nuevo=$("#nombre").val();
 	 var pin2=nuevo.replace('-','/');
@@ -318,6 +420,14 @@ $("#nombre").change(revisar);
 	  }
   function conMayusculas(field) {
             field.value = field.value.toUpperCase()
+}
+
+function trunc(x, posiciones = 0) {
+    var s = x.toString();
+    var decimalLength = s.indexOf('.') + 1;
+    if (decimalLength === 0) return Number(s);
+    var numStr = s.substr(0, decimalLength + posiciones);
+    return Number(numStr);
 }
  		</script>
 			@endpush

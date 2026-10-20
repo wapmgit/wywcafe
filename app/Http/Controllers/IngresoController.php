@@ -225,6 +225,7 @@ class IngresoController extends Controller
 		$kar->fecha=$mytime->toDateTimeString();
 		$kar->documento="COMP-".$request->get('num_comprobante');
 		$kar->idarticulo=$idarticulo[$cont];
+		$kar->iddoc=$ingreso->idingreso;
 		$kar->cantidad=$cantidad[$cont];
 		$kar->exis_ant=$stock;
 		$kar->costo=$precio_compra[$cont];

@@ -110,9 +110,9 @@ class CategoriaController extends Controller
          $contador=DB::table('venta')->select('idventa')->limit('1')->orderby('idventa','desc')->get();
 		 $vendedores=DB::table('vendedores')-> where('idempresa','=',$ide)->where('id_vendedor','=',$idvende)->where('estatus','=',1)->get(); 
 			//dd($contador);
-     $articulos = DB::table('articulo as a')
+$q1 = DB::table('articulo as a')
     ->join('existencia as ex', 'ex.idarticulo', '=', 'a.idarticulo')
-    ->selectRaw('CONCAT(a.codigo, " ", a.nombre) as articulo') // Más limpio que DB::raw
+    ->selectRaw('CONCAT(a.codigo, " ", a.nombre) as articulo')
     ->addSelect([
         'a.idarticulo',
         'ex.existencia as stock',
@@ -120,15 +120,40 @@ class CategoriaController extends Controller
         'a.precio1 as precio_promedio',
         'a.precio2',
         'ex.id_almacen',
-        'a.iva',
+        'a.iva',  
+        DB::raw('0 as usap'), // O puedes usar un ID ficticio como 0 para mantener simetría con el id de la presentación de q2
+        'a.mprima as licor',    
         'a.fraccion',
-        'a.mprima as licor'
     ])
     ->where('a.estado', 'Activo')
     ->where('a.sevende', '1')
     ->where('ex.id_almacen', $depvend->id_deposito)
+    ->where('ex.existencia', '>', 0);
+
+$q2 = DB::table('articulo as art')
+    ->join('existencia as ex', 'ex.idarticulo', '=', 'art.idarticulo')
+    ->join('presentacion as pre', 'pre.idarticulo', '=', 'art.idarticulo')
+    ->select(
+        DB::raw('CONCAT(art.codigo, " ", art.nombre, " ", pre.descripcion) as articulo'),
+        'art.idarticulo',
+        DB::raw('(ex.existencia / pre.cantidad) as stock'),
+        'pre.costo',
+        'pre.preciov as precio_promedio',
+        'pre.preciov as precio2',
+        'ex.id_almacen', // <--- Asegúrate de incluir esta columna si está en $q1 para que tengan el mismo orden y cantidad de campos
+        'art.iva',
+        'pre.id as usap',
+        'art.mprima as licor',
+        'art.fraccion'
+    )
+    ->where('art.estado', '=', 'Activo')
+    ->where('art.usap', '=', '1')
+    ->where('art.sevende', '=', 1)
+    ->where('ex.id_almacen', $depvend->id_deposito)
     ->where('ex.existencia', '>', 0)
-    ->get();
+    ->groupBy('articulo', 'art.idarticulo'); // Quitamos el punto y coma de aquí
+
+$articulos = $q1->union($q2)->get();
         //dd($articulos);
 		if ($contador==""){$contador=0;}
 		return view("ventas.venta.create",["rol"=>$rol,"nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"monedas"=>$monedas,"articulos"=>$articulos,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedores]);

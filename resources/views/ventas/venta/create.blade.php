@@ -156,7 +156,7 @@ $idv=0;
                              <select name="pidarticulo"  id="pidarticulo" class="form-control selectpicker" data-live-search="true" >
                               <option value="1000" selected="selected">Seleccione..</option>
                              @foreach ($articulos as $articulo)
-                              <option value="{{$articulo -> idarticulo}}_{{$articulo -> stock}}_{{$articulo -> precio_promedio}}_{{$articulo -> precio2}}_{{$articulo -> costo}}_{{$articulo->iva}}_{{$articulo->licor}}_{{$articulo->fraccion}}">{{$articulo -> articulo}}</option>
+                              <option value="{{$articulo -> idarticulo}}_{{$articulo -> stock}}_{{$articulo -> precio_promedio}}_{{$articulo -> precio2}}_{{$articulo -> costo}}_{{$articulo->iva}}_{{$articulo->licor}}_{{$articulo->fraccion}}_{{$articulo->usap}}">{{$articulo -> articulo}}</option>
                              @endforeach
                               </select>
                         </div>
@@ -537,6 +537,7 @@ var count =document.getElementById('id_cliente').options.length;
 	totalexe=0;
 	subtotal=[];
 	licor=[];
+	usap=[];
 	subtotalc=[];
 	subdif=[];
 	subiva=[];
@@ -602,7 +603,7 @@ var count =document.getElementById('id_cliente').options.length;
 		if(parada>0){ for(j=0;j<=parada;j++){ 
 	$("#pidarticulo")
 	.append( 
-    '<option value="'+resultado3[3][j].idarticulo+'_'+resultado3[3][j].stock+'_'+resultado3[3][j].precio_promedio+'_'+resultado3[3][j].precio2+'_'+resultado3[3][j].costo+'_'+resultado3[3][j].iva+'_'+resultado3[3][j].licor+'_'+resultado3[3][j].fraccion+'">'+resultado3[3][j].articulo+'</option>' )
+    '<option value="'+resultado3[3][j].idarticulo+'_'+resultado3[3][j].stock+'_'+resultado3[3][j].precio_promedio+'_'+resultado3[3][j].precio2+'_'+resultado3[3][j].costo+'_'+resultado3[3][j].iva+'_'+resultado3[3][j].licor+'_'+resultado3[3][j].fraccion+'_'+resultado3[3][j].usap+'">'+resultado3[3][j].articulo+'</option>' )
 	.selectpicker('refresh');
         } }
 			//	alert(rowscxc);
@@ -652,6 +653,7 @@ var count =document.getElementById('id_cliente').options.length;
 
                 if (cantidad <= stock){
 					licor[cont]=datosarticulo[6];
+					usap[cont]=datosarticulo[8];
 					subexe[cont]=0;
 					if(alicuota>0){ 
 					subiva[cont]=trunc(((precio_venta)/((alicuota/100)+1)), 2);
@@ -679,7 +681,7 @@ var count =document.getElementById('id_cliente').options.length;
                 total=parseFloat(total)+parseFloat(subtotal[cont].toFixed(2));
                 totalc=parseFloat(totalc)+parseFloat(subtotalc[cont].toFixed(2));
 
-             var fila='<tr class="selected" id="fila'+cont+'" ><td><button class="btn btn-warning btn-xs"  onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" name="cantidad[]" readonly="true" style="width: 60px" value="'+cantidad+'"></td><td>'+preopt+'<input type="hidden" name="tprecio[]"  value="'+preopt+'"><input type="number" name="precio[]" readonly="true" style="width: 60px" value="'+precio+'"></td><td><input type="number"  name="descuento[]" readonly="true" style="width: 80px" value="'+descuento+'"></td><td><input type="number" readonly="true" style="width: 80px" name="precio_venta[]" value="'+precio_venta+'"></td><td>'+subtotal[cont].toFixed(2)+'<input type="hidden" name="costoarticulo[]" readonly="true" value="'+costoarticulo+'"><input type="hidden" name="eslicor[]"  value="'+licor[cont]+'"></td></tr>';
+             var fila='<tr class="selected" id="fila'+cont+'" ><td><button class="btn btn-warning btn-xs"  onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" name="cantidad[]" readonly="true" style="width: 60px" value="'+cantidad+'"></td><td>'+preopt+'<input type="hidden" name="tprecio[]"  value="'+preopt+'"><input type="number" name="precio[]" readonly="true" style="width: 60px" value="'+precio+'"></td><td><input type="number"  name="descuento[]" readonly="true" style="width: 80px" value="'+descuento+'"></td><td><input type="number" readonly="true" style="width: 80px" name="precio_venta[]" value="'+precio_venta+'"></td><td>'+subtotal[cont].toFixed(2)+'<input type="hidden" name="costoarticulo[]" readonly="true" value="'+costoarticulo+'"><input type="hidden" name="usap[]"  value="'+usap[cont]+'"><input type="hidden" name="eslicor[]"  value="'+licor[cont]+'"></td></tr>';
               cont++;   
 			  contl++;
 			  evaluar();   

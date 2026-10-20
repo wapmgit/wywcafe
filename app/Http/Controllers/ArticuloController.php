@@ -8,6 +8,7 @@ use sisventas\Http\Requests;
 use sisventas\Articulo;
 use sisventas\Existencia;
 use sisventas\Vendedores;
+use sisventas\Presentacion;
 use sisventas\DetalleIngreso;
 use sisventas\ReportesController;
 use Illuminate\Support\Facades\Redirect;
@@ -80,6 +81,7 @@ class ArticuloController extends Controller
         $articulo->estado='Activo';
         $articulo->utilidad=$request->get('utilidad');
 		$articulo->unidad=$request->get('unidad');
+		if($request->get('usap')==1){$articulo->usap=1;}else{$articulo->usap=0;}
         $articulo->precio1=$request->get('precio1');
         $articulo->precio2=$request->get('precio2');
          $articulo->util2=$request->get('util2');
@@ -106,6 +108,27 @@ class ArticuloController extends Controller
         }
 
         $articulo->save();
+					if ($articulo->usap==1){
+			
+		$idg = $request -> get('vidgrupo');
+		$ngrupo = $request -> get('vngrupo');
+        $cnt = $request -> get('vgcant');
+        $gutil = $request -> get('vgutil');
+        $precio = $request -> get('vgpre');
+		$cont = 0;		
+		   while($cont < count($idg)){
+
+			$grupo=new Presentacion;
+			$grupo->idarticulo=$articulo->idarticulo;
+			$grupo->descripcion=$ngrupo[$cont];
+			$grupo->costo=$articulo->costo*$cnt[$cont];
+			$grupo->utilidad=$gutil[$cont];
+			$grupo->cantidad=$cnt[$cont];
+			$grupo->preciov=$precio[$cont];
+			 $grupo->save();
+			 $cont=$cont+1;
+		}
+		}
 		    $deposito=DB::table('depvendedor')->select('id_deposito','idvendedor')
             ->where('idempresa','=',$ide)
 			->orderBy('id_deposito','asc')			
@@ -169,8 +192,9 @@ catch(\Exception $e)
     {
     	 $articulos=Articulo::findOrFail($id);
     	 $categorias=DB::table('categoria')->where('condicion','=','1')->get();
+		$presentacion=DB::table('presentacion')->where('idarticulo','=',$id)->get();
 		 $empresa=DB::table('empresa')-> where('idempresa','=','1')->first();
-        return view("almacen/articulo.edit",["articulo"=>$articulos,"categorias"=>$categorias,"empresa"=>$empresa]);
+        return view("almacen/articulo.edit",["presentacion"=>$presentacion,"articulo"=>$articulos,"categorias"=>$categorias,"empresa"=>$empresa]);
     }
     public function update(ArticuloFormRequest $request,$id)
     {
@@ -184,6 +208,7 @@ catch(\Exception $e)
         $articulo->estado='Activo';
         $articulo->utilidad=$request->get('utilidad');
         $articulo->unidad=$request->get('unidad');
+		if($request->get('usap')==1){$articulo->usap=1;}else{$articulo->usap=0;}
         $articulo->precio1=$request->get('precio1');
         $articulo->precio2=$request->get('precio2');
         $articulo->util2=$request->get('util2');
@@ -208,6 +233,39 @@ catch(\Exception $e)
         	$articulo->imagen=$file->getClientOriginalName();
         }
         $articulo->update();
+		
+			if ($articulo->usap==1){
+			
+		$idg = $request -> get('vidgrupo');
+		$ngrupo = $request -> get('vngrupo');
+        $cnt = $request -> get('vgcant');
+        $gutil = $request -> get('vgutil');
+        $precio = $request -> get('vgpre');
+		$cont = 0;		
+		   while($cont < count($idg)){
+			   if($idg[$cont]==0){
+			$grupo=new Presentacion;
+			$grupo->idarticulo=$articulo->idarticulo;
+			$grupo->descripcion=$ngrupo[$cont];
+			$grupo->costo=$articulo->costo*$cnt[$cont];
+			$grupo->utilidad=$gutil[$cont];
+			$grupo->cantidad=$cnt[$cont];
+			$grupo->preciov=$precio[$cont];
+			 $grupo->save();
+			   }else{
+			 $grupo=Presentacion::findOrFail($idg[$cont]);
+			$grupo->idarticulo=$articulo->idarticulo;
+			$grupo->descripcion=$ngrupo[$cont];
+			$grupo->costo=$articulo->costo*$cnt[$cont];
+			$grupo->utilidad=$gutil[$cont];
+			$grupo->cantidad=$cnt[$cont];
+			$grupo->preciov=$precio[$cont];
+			if($cnt[$cont]==0){$grupo->delete();}else{
+			$grupo->update();}
+			   }
+			 $cont=$cont+1;
+		}
+		}
         return Redirect::to('almacen/articulo');
     }
     public function destroy(Request $request,$id)
@@ -259,7 +317,7 @@ catch(\Exception $e)
     }
 	 public function kardex($id)
    {	
-		//	dd($id);	
+			//dd($id);	
 	 	 $articulo=Articulo::findOrFail($id);		 
 		$datos=DB::table('kardex as k')
 		->where('k.idarticulo','=',$id)
@@ -307,7 +365,7 @@ catch(\Exception $e)
     }
 			 public function detallekardex($id)
    {	
-//dd($id);
+
 	$data=explode("_",$id);
     $id=$data[0];
     $art=$data[1];
@@ -320,7 +378,7 @@ catch(\Exception $e)
             -> first();
             $detalles=DB::table('detalle_venta as dv')
             -> join('articulo as a','dv.idarticulo','=','a.idarticulo')
-            -> select('a.nombre as articulo','dv.cantidad','dv.descuento','dv.precio_venta','dv.idarticulo')
+            -> select('a.nombre as articulo','dv.unidad','dv.cantidad','dv.descuento','dv.precio_venta','dv.idarticulo')
             -> where ('dv.idventa','=',$id)
 			->orderBy('a.nombre','asc')
             ->get();

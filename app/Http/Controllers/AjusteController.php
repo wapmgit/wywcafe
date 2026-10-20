@@ -64,13 +64,14 @@ class AjusteController extends Controller
         return view("compras.ajuste.create",["articulos"=>$articulos,"empresa"=>$empresa,"categorias"=>$categorias]);
     } 
     public function store(Request $request){
-	//	dd($request);
+		
 $user=Auth::user()->name;
 $ide=Auth::user()->idempresa;
 $dep=DB::table('depvendedor')->select('id_deposito')
             ->where('idempresa','=',$ide)
 			->orderBy('id_deposito','asc')			
             ->first();
+
 try{
 	$contador=DB::table('ajuste')->select(DB::raw('count(idajuste) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idajuste','desc')->first();
    if ($contador==NULL){$numero=0;}else{$numero=$contador->idventa;}
@@ -133,6 +134,7 @@ try{
  		$kar=new Kardex;
 		$kar->fecha=$mytime->toDateTimeString();
 		$kar->documento="AJUS-".$ajuste->idajuste;
+		$kar->iddoc=$ajuste->idajuste;
 		$kar->idarticulo=$idarticulo[$cont];
 		$kar->cantidad=$cantidad[$cont];
 		$kar->exis_ant=$stock;

@@ -36,7 +36,7 @@
                         @foreach($detalles as $det)
 						<?php if($det->idarticulo != 999999){ ?>
                         <tr >
-                          <td>{{$det->articulo}}</td>
+                          <td>{{$det->articulo}} {{$det->unidad}}</td>
                           <td align="center">{{$det->cantidad}}</td>
                           <td align="center">{{$det->precio}}</td>
                           <td align="center">{{$det->descuento}}</td>

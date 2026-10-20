@@ -11,6 +11,7 @@ use sisventas\Ventaf;
 use sisventas\Relacionnc;
 use sisventas\devolucion;
 use sisventas\Existencia;
+use sisventas\Presentacion;
 use sisventas\Detalledevolucion;
 use sisventas\Detalleimportar;
 use sisventas\Articulo;
@@ -79,30 +80,79 @@ class VentaController extends Controller
 		-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
          $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))->where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->get();
       //dd($contador);
-        $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
+        $q1 =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
+        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva',DB::raw('0 as usap'),'categoria.licor','art.fraccion')
         ->where('art.idempresa','=',$ide)
 		-> where('art.estado','=','Activo')
         -> where ('art.stock','>','0')
-        ->groupby('articulo','art.idarticulo')
-        -> get();
+		-> where ('art.sevende','=',1)
+        ->groupby('articulo','art.idarticulo');
+      //  -> get();
+			$q2=DB::table('articulo as art')
+			->join('categoria','categoria.idcategoria','=','art.idcategoria')
+			->join('presentacion as pre','pre.idarticulo','=','art.idarticulo')
+        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre," ",pre.descripcion) as articulo'),'art.idarticulo',DB::raw('(art.stock/pre.cantidad) as stock'),'pre.costo','pre.preciov as precio_promedio','pre.preciov as precio2','art.iva','pre.id as usap','categoria.licor','art.fraccion')
+        -> where('art.estado','=','Activo')
+        -> where ('art.stock','>','0')
+        -> where ('art.usap','=','1')
+		  -> where ('art.sevende','=',1)
+        ->groupby('articulo','art.idarticulo');
+		$articulos= $q1->union($q2)->get();
 		//dd($articulos);
      if ($contador==""){$contador=0;}
 		}else{
 		$idvende=Auth::user()->vendedor;
+		$depvend=DB::table('depvendedor')->select('id_deposito')->where('idvendedor','=',$idvende)->first();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
 		$monedas=DB::table('monedas')-> where('idempresa','=',$ide)->get();
 		$personas=DB::table('clientes')->join('vendedores','vendedores.id_vendedor','=','clientes.vendedor')->select('clientes.id_cliente','clientes.tipo_precio','clientes.tipo_cliente','clientes.diascre','clientes.nombre','clientes.cedula','vendedores.comision','vendedores.id_vendedor as nombrev','clientes.licencia')-> where('clientes.idempresa','=',$ide)-> where('clientes.vendedor','=',$idvende)-> where('clientes.status','=','A')->groupby('clientes.id_cliente')->get();
          $contador=DB::table('venta')->select('idventa')->limit('1')->orderby('idventa','desc')->get();
 		 $vendedor=DB::table('vendedores')-> where('idempresa','=',$ide)->where('id_vendedor','=',$idvende)->where('estatus','=',1)->get(); 
 			//dd($contador);
-       $articulos =DB::table('articulo as art')->join('categoria','categoria.idcategoria','=','art.idcategoria')
-        -> select(DB::raw('CONCAT(art.codigo," ",art.nombre) as articulo'),'art.idarticulo','art.stock','art.costo','art.precio1 as precio_promedio','art.precio2 as precio2','art.iva','categoria.licor','art.fraccion')
-        ->where('art.idempresa','=',$ide)
-		-> where('art.estado','=','Activo')
-        -> where ('art.stock','>','0')
-        ->groupby('articulo','art.idarticulo')
-        -> get();
+$q1 = DB::table('articulo as a')
+    ->join('existencia as ex', 'ex.idarticulo', '=', 'a.idarticulo')
+    ->selectRaw('CONCAT(a.codigo, " ", a.nombre) as articulo')
+    ->addSelect([
+        'a.idarticulo',
+        'ex.existencia as stock',
+        'a.costo',
+        'a.precio1 as precio_promedio',
+        'a.precio2',
+        'ex.id_almacen',
+        'a.iva',  
+        DB::raw('0 as usap'), // O puedes usar un ID ficticio como 0 para mantener simetría con el id de la presentación de q2
+        'a.mprima as licor',    
+        'a.fraccion',
+    ])
+    ->where('a.estado', 'Activo')
+    ->where('a.sevende', '1')
+    ->where('ex.id_almacen', $depvend->id_deposito)
+    ->where('ex.existencia', '>', 0);
+
+$q2 = DB::table('articulo as art')
+    ->join('existencia as ex', 'ex.idarticulo', '=', 'art.idarticulo')
+    ->join('presentacion as pre', 'pre.idarticulo', '=', 'art.idarticulo')
+    ->select(
+        DB::raw('CONCAT(art.codigo, " ", art.nombre, " ", pre.descripcion) as articulo'),
+        'art.idarticulo',
+        DB::raw('(ex.existencia / pre.cantidad) as stock'),
+        'pre.costo',
+        'pre.preciov as precio_promedio',
+        'pre.preciov as precio2',
+        'ex.id_almacen', // <--- Asegúrate de incluir esta columna si está en $q1 para que tengan el mismo orden y cantidad de campos
+        'art.iva',
+        'pre.id as usap',
+        'art.mprima as licor',
+        'art.fraccion'
+    )
+    ->where('art.estado', '=', 'Activo')
+    ->where('art.usap', '=', '1')
+    ->where('art.sevende', '=', 1)
+    ->where('ex.id_almacen', $depvend->id_deposito)
+    ->where('ex.existencia', '>', 0)
+    ->groupBy('articulo', 'art.idarticulo'); // Quitamos el punto y coma de aquí
+
+$articulos = $q1->union($q2)->get();
         //dd($articulos);
 		if ($contador==""){$contador=0;}
 		}
@@ -439,6 +489,7 @@ catch(\Exception $e)
         $tprecio = $request -> get('tprecio');
         $precio_venta = $request -> get('precio_venta');
         $costoarticulo = $request -> get('costoarticulo');
+		$usap = $request -> get('usap');
         $eslicor = $request -> get('eslicor');
 			if($request->get('convertir')=="on"){
 				$cont = 0; 
@@ -462,8 +513,19 @@ catch(\Exception $e)
             $detalle->idventa=$venta->idventa;
             $detalle->idempresa=$ide;
             $detalle->idarticulo=$idarticulo[$cont];
+				if($usap[$cont]==0){
+				$salida=$cantidad[$cont];
+				$cntg=1;
+			   $detalle->unidad="UND";}
+				else{
+				$cntventa=Presentacion::findOrFail($usap[$cont]);
+				 $detalle->unidad=$cntventa->descripcion;	
+				  $salida=$cantidad[$cont]*$cntventa->cantidad;
+					$cntg=$cntventa->cantidad;
+				}
             $detalle->costoarticulo=$costoarticulo[$cont];
             $detalle->cantidad=$cantidad[$cont];
+			$detalle->cntgrp=$cntg;
             $detalle->descuento=$descuento[$cont];
             $detalle->tprecio=$tprecio[$cont];
             $detalle->precio=$precio[$cont];
@@ -473,13 +535,14 @@ catch(\Exception $e)
             $detalle->save();
 			$articulo=Articulo::findOrFail($idarticulo[$cont]);
 			$stock=$articulo->stock;
-			$articulo->stock=$articulo->stock-$cantidad[$cont];
+			$articulo->stock=$articulo->stock-$salida;
 			
 		$kar=new Kardex;
 		$kar->fecha=$mytime->toDateTimeString();
 		$kar->documento="VENT-".($numero+1);
+		$kar->iddoc=$venta->idventa;
 		$kar->idarticulo=$idarticulo[$cont];
-		$kar->cantidad=$cantidad[$cont];
+		$kar->cantidad=$salida;
 		$kar->exis_ant=$stock;
 		$kar->costo=$costoarticulo[$cont];
 		$kar->tipo=2; 
@@ -491,13 +554,13 @@ catch(\Exception $e)
             ->where('idarticulo','=',$idarticulo[$cont])		
             ->first();
 					$exis=Existencia::findOrFail($deposito->id);
-					$exis->existencia=($exis->existencia-$cantidad[$cont]);
+					$exis->existencia=($exis->existencia-$salida);
 					$exis->update();
                       //actualizo stock   
 		//cimision 
 					
-				$mcomi=$mcomi+(($cantidad[$cont]*$precio_venta[$cont])*($articulo->pcomision/100)); 
-				$mcomiv=$mcomiv+(($cantidad[$cont]*$precio_venta[$cont])*($request->get('comision')/100));
+				$mcomi=$mcomi+(($salida*$precio_venta[$cont])*($articulo->pcomision/100)); 
+				$mcomiv=$mcomiv+(($salida*$precio_venta[$cont])*($request->get('comision')/100));
 //				
         $articulo->update();
 		if($eslicor[$cont]==1){
@@ -823,10 +886,10 @@ public function show(Request $request,$id){
             -> select ('r.nombre as nruta','vend.nombre as vendedor','p.id_cliente','v.idventa','v.saldo','v.fecha_emi','p.nombre','p.cedula','p.licencia','p.telefono','p.ruta','p.direccion','p.contacto','v.tipo_comprobante','v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado','v.total_venta','v.devolu','v.diascre','p.recargo')
             ->where ('v.idventa','=',$id)
             -> first();
-		
+	
             $detalles=DB::table('detalle_venta as dv')
             -> join('articulo as a','dv.idarticulo','=','a.idarticulo')
-              -> select('a.nombre as articulo','dv.precio','dv.cantidad','dv.descuento','dv.precio_venta','dv.idarticulo')
+              -> select('a.nombre as articulo','dv.unidad','dv.precio','dv.cantidad','dv.descuento','dv.precio_venta','dv.idarticulo')
             -> where ('dv.idventa','=',$id)
 			->orderBy('a.nombre','asc')
             ->get();
@@ -880,14 +943,14 @@ public function ver(Request $request, $id){
             -> first();
             $detalles=DB::table('detalle_venta as dv')
             -> join('articulo as a','dv.idarticulo','=','a.idarticulo')
-            -> select('a.nombre as articulo','dv.cantidad','dv.descuento','dv.precio_venta')
+            -> select('a.nombre as articulo','dv.unidad','dv.cantidad','dv.descuento','dv.precio_venta')
             -> where ('dv.idventa','=',$id)
             ->get();
 			$recibo=DB::table('recibos as r')-> where ('r.idventa','=',$id)
             ->get();
 			$recibonc=DB::table('mov_notas as mov')-> where ('mov.iddoc','=',$id)-> where ('mov.tipodoc','=',"FAC")
             ->get();
-
+		//dd($recibo);
             return view("ventas.venta.recibo",["venta"=>$venta,"recibos"=>$recibo,"recibonc"=>$recibonc,"empresa"=>$empresa,"detalles"=>$detalles]);
 }
  public function edit(Request $request, $idcliente){
