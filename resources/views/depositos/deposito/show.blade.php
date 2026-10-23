@@ -31,17 +31,20 @@
                           <th>Costo</th>
                           <th>Precio</th>
                           <th>Stock</th>
+                          <th>Kilogramos</th>
                           <th>Valorizado</th>
-              </thead><?php $acumcosto=0; $acumprecio=0; $acum=0; $monto=0;?>
+              </thead><?php $acumcosto=0; $acumprecio=0; $acum=0; $acumkilos=0; $monto=0;?>
                       <tbody>
                         @foreach($articulos as $det)
                         <tr > <?php $acumcosto=($acumcosto+($det->costo*$det->stock)); $acum=($acum+$det->stock);
+						$acumkilos=$acumkilos+($det->stock*($det->pesogr/1000));
 						$acumprecio=($acumprecio+($det->precio1*$det->stock)); $monto=($monto+($det->stock*$det->precio1)); ?>
                           <td>{{$det->codigo}}</td>
                           <td>{{$det->nombre}}</td>
                           <td>{{$det->costo}}</td>
                           <td>{{$det->precio1}}</td>
                           <td>{{$det->stock}}</td>
+                          <td>{{$det->stock*($det->pesogr/1000)}}</td>
                           <td>{{$det->stock*$det->precio1}}</td>
                           
                         </tr>
@@ -50,6 +53,7 @@
 					  <tr><td colspan="2">Total: </td><td><strong><?php echo number_format($acumcosto, 2,',','.');?></strong></td>
 					  <td><strong><?php echo number_format($acumprecio, 2,',','.');?></strong></td>
 					  <td><strong><?php echo number_format($acum, 2,',','.');?></strong></td>
+					  <td><strong><?php echo number_format($acumkilos, 2,',','.');?></strong></td>
 					  <td><strong><?php echo number_format($monto, 2,',','.');?></strong></td></tr>
                   </table>
                  

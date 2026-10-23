@@ -84,6 +84,7 @@ $rol=DB::table('roles')-> select('vacios')->where('iduser','=',$request->user()-
 		->orderBy('iddetalle','asc')
 		->get();
 
+		dd($movimiento);
 		return view('almacen.deposito.show',["movimiento"=>$movimiento,"empresa"=>$empresa,"deposito"=>$deposito]);
 		
 	}

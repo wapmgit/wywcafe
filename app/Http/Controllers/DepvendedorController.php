@@ -66,11 +66,11 @@ error_reporting(E_ALL);
 			$articulos=DB::table('articulo as a')
             -> join('existencia as ex','a.idarticulo','=','ex.idarticulo')
 			-> join('categoria as c','a.idcategoria','=','c.idcategoria')
-            -> select ('a.idarticulo','a.nombre','a.codigo','a.costo','a.precio1','ex.existencia as stock','c.nombre as categoria','a.descripcion','a.estado')
+            -> select ('a.idarticulo','a.nombre','a.codigo','a.costo','a.precio1','ex.existencia as stock','c.nombre as categoria','a.descripcion','a.estado','a.pesogr')
             ->where ('ex.id_almacen','=',$id)
             ->where ('a.estado','=','Activo')
             ->orderBy('a.nombre','asc')
-            ->paginate(20);    
+            ->paginate(50);    
       return view("depositos.deposito.show",["articulos"=>$articulos,"categoria"=>$categoria]);
     }
 }

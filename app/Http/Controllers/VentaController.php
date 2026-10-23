@@ -153,7 +153,7 @@ $q2 = DB::table('articulo as art')
     ->groupBy('articulo', 'art.idarticulo'); // Quitamos el punto y coma de aquí
 
 $articulos = $q1->union($q2)->get();
-        //dd($articulos);
+        dd($articulos);
 		if ($contador==""){$contador=0;}
 		}
       return view("ventas.venta.create",["rol"=>$rol,"nivel"=>$nivel,"rutas"=>$rutas,"personas"=>$personas,"articulos"=>$articulos,"monedas"=>$monedas,"contador"=>$contador,"empresa"=>$empresa,"vendedores"=>$vendedor]);
