@@ -24,6 +24,7 @@
 					<th>Codigo</th>
 					<th>Nombre</th>
 					<th>Existencia</th>
+					<th>Kilogramos</th>
 					<th>Kardex</th>
 					<th>Costo</th>
           <th>Iva</th>
@@ -32,17 +33,19 @@
            <th>Utilidad 2</th>
           <th>Precio 2</th>
 					
-				</thead><?php $count=0; $costo=0;$costoacum=0; $precioacum=0;?>
+				</thead><?php $count=0; $costo=0;$costoacum=0; $acumkilos=0; $precioacum=0;?>
                @foreach ($lista as $q)
 				<tr> <?php $count++; $int=0;$outt=0;
         $costoacum=$q->stock+$costoacum;
 		$costo=$costo+($q->costo*$q->stock);
         $precioacum=$q->stock*$q->precio1+$precioacum;
+		$acumkilos=$acumkilos+($q->stock*($q->pesogr/1000));
          ?> 
 
           <td>{{ $q->codigo}}</td>
 					<td>{{ $q->nombre}}</td>
 					<td>{{ $q->stock}}</td>
+					<td>{{$q->stock*($q->pesogr/1000)}}</td>
 					<td>
 					 @foreach ($ingreso as $in)
 					 <?Php if($in->idarticulo==$q->idarticulo){$int= $in->total; }?>					
@@ -63,7 +66,9 @@
 				@endforeach
         <tr style="background-color: #E6E6E6" >
           <td colspan="2"><?php echo "<strong>Articulos: ".$count."</strong>"; ?></td>
-          <td><?php echo "<strong>existencias : ".$costoacum."</strong>"; ?></td>
+          <td><?php echo "<strong>Existencias : ".$costoacum."</strong>"; ?></td>
+          <td><strong><?php echo number_format($acumkilos, 2,',','.');?></strong></td>
+		    <td></td>
           <td ><?php echo "<strong>".$costo." $</strong>"; ?></td>
           <td></td>
           <td></td>

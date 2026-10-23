@@ -503,10 +503,11 @@ return Redirect::to('ventas/venta');
     }
      public function inventario(Request $request)
     {   
+
 		$ide=Auth::user()->idempresa;
         $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
         $lista=DB::table('articulo as art')->join('categoria as cat','cat.idcategoria','=','art.idcategoria')
-		->select('art.idarticulo','art.nombre as nombre','art.stock','art.codigo','art.utilidad','art.util2','art.precio1','art.precio2','art.costo','art.iva')
+		->select('art.idarticulo','art.nombre as nombre','art.stock','art.codigo','art.utilidad','art.util2','art.precio1','art.precio2','art.costo','art.iva','art.pesogr')
 		->where('art.estado','=',"Activo")
 		->where('art.idempresa','=',$ide)	
 		->where('cat.servicio','=',0)
