@@ -71,7 +71,6 @@ $dep=DB::table('depvendedor')->select('id_deposito')
             ->where('idempresa','=',$ide)
 			->orderBy('id_deposito','asc')			
             ->first();
-
 try{
 	$contador=DB::table('ajuste')->select(DB::raw('count(idajuste) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idajuste','desc')->first();
    if ($contador==NULL){$numero=0;}else{$numero=$contador->idventa;}
@@ -126,7 +125,7 @@ try{
             ->where('idarticulo','=',$idarticulo[$cont])		
             ->first();
 					$exis=Existencia::findOrFail($deposito->id);
-					if($tipom=1){
+					if($tipom==1){
 					$exis->existencia=($exis->existencia+$cantidad[$cont]); }else{
 					$exis->existencia=($exis->existencia-$cantidad[$cont]);	
 					}
