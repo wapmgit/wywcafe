@@ -101,7 +101,7 @@ class CategoriaController extends Controller
 		
         return view('almacen.categoria.grafico',["vene"=>$vene,"vfeb"=>$vfeb,"vmar"=>$vmar,"vabr"=>$vabr,"vmay"=>$vmay,"vjun"=>$vjun,"vjul"=>$vjul,"vago"=>$vago,"cene"=>$cene,"cfeb"=>$cfeb,"cmar"=>$cmar,"cmay"=>$cmay,"cabr"=>$cabr,"cjun"=>$cjun,"cjul"=>$cjul,"cago"=>$cago,"csep"=>$csep,"vsep"=>$vsep,"voct"=>$voct,"coct"=>$coct,"vnov"=>$vnov,"cnov"=>$cnov,"vdic"=>$vdic,"cdic"=>$cdic,"empresa"=>$empresa,"clientes"=>$clientes,"proveedor"=>$proveedor,"articulo"=>$articulos,"vendedores"=>$vendedores]);
     } else {
-		$rol=DB::table('roles')-> select('cambiarprecioventa')->where('iduser','=',Auth::user()->id)->first();	
+		$rol=DB::table('roles')-> select('cambiarprecioventa','editarprecioventa')->where('iduser','=',Auth::user()->id)->first();	
 		$idvende=Auth::user()->vendedor;
 		$depvend=DB::table('depvendedor')->select('id_deposito')->where('idvendedor','=',$idvende)->first();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();

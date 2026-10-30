@@ -70,7 +70,7 @@ class VentaController extends Controller
 		$ide=Auth::user()->idempresa;
 		$nivel=Auth::user()->nivel;
 		  $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
-		  $rol=DB::table('roles')-> select('cambiarprecioventa')->where('iduser','=',$request->user()->id)->first();	
+		  $rol=DB::table('roles')-> select('cambiarprecioventa','editarprecioventa')->where('iduser','=',$request->user()->id)->first();	
 		if($nivel=="A"){
 		$monedas=DB::table('monedas')->where('idempresa','=',$ide)->get();
 		$rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();

@@ -110,140 +110,146 @@ role="dialog" tabindex="-1" id="roles{{$q->id}}">
 				</div>
 							</div>
 							<div class="tab-pane" id="tab_2{{$q->id}}">
-								  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Compras: </label><label>
 					  <input type="checkbox" name="op9" class="minimal" @if($q->crearcompra==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Anular Compras: </label><label>
 					  <input type="checkbox" name="op10" class="minimal" @if($q->anularcompra==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Importar N/E a Compras: </label><label>
 					  <input type="checkbox" name="op44" class="minimal" @if($q->importarne==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Venta: </label><label>
 					  <input type="checkbox" name="op11" class="minimal" @if($q->crearventa==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Anular Venta: </label><label>
 					  <input type="checkbox" name="op12" class="minimal" @if($q->anularventa==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
-					 <label>Modificar Precio Venta: </label><label>
+					 <label>Cambiar Tipo Precio Venta: </label><label>
 					  <input type="checkbox" name="op59" class="minimal" @if($q->cambiarprecioventa==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+					 <div class="form-group">
+					 <label>Editar Precio Venta: </label><label>
+					  <input type="checkbox" name="op60" class="minimal" @if($q->editarprecioventa==1) checked @endif ></label>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Forma Libre: </label><label>
 					  <input type="checkbox" name="op45" class="minimal" @if($q->crearfl==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Importar Docs. a Formal LIbre: </label><label>
 					  <input type="checkbox" name="op46" class="minimal" @if($q->importarfl==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Anular Formal LIbre: </label><label>
 					  <input type="checkbox" name="op47" class="minimal" @if($q->anularfl==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Factura Externa: </label><label>
 					  <input type="checkbox" name="op48" class="minimal" @if($q->crearfe==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Editar Factura Externa: </label><label>
 					  <input type="checkbox" name="op49" class="minimal" @if($q->editarfe==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Anular Factura Externa: </label><label>
 					  <input type="checkbox" name="op50" class="minimal" @if($q->anularfe==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Gasto: </label><label>
 					  <input type="checkbox" name="op13" class="minimal" @if($q->creargasto==1) checked @endif ></label>
 
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Anular Gasto: </label><label>
 					  <input type="checkbox" name="op14" class="minimal"@if($q->anulargasto==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Abonar Compras: </label><label>
 					  <input type="checkbox" name="op15" class="minimal" @if($q->abonarcxp==1) checked @endif ></label>			
 					</div>
 				</div>		
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Ajuste: </label><label>
 					  <input type="checkbox" name="op16" class="minimal" @if($q->crearajuste==1) checked @endif ></label>			
 					</div>
 				</div>		
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Abonar Gastos: </label><label>
 					  <input type="checkbox" name="op17" class="minimal" @if($q->abonargasto==1) checked @endif ></label>			
 					</div>
 				</div>					
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Abonar Ventas: </label><label>
 					  <input type="checkbox" name="op18" class="minimal" @if($q->abonarcxc==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Pedidos: </label><label>
 					  <input type="checkbox" name="op19" class="minimal" @if($q->crearpedido==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Anular Pedido: </label><label>
 					  <input type="checkbox" name="op20" class="minimal" @if($q->anularpedido==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Importar Pedido: </label><label>
 					  <input type="checkbox" name="op21" class="minimal" @if($q->importarpedido==1) checked @endif ></label>
 					</div>
 				</div>
-					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Modificar Pedido: </label><label>
 					  <input type="checkbox" name="op22" class="minimal" @if($q->editpedido==1) checked @endif ></label>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Acceso Control Vacios: </label><label>
 					  <input type="checkbox" name="op51" class="minimal" @if($q->vacios==1) checked @endif ></label>
