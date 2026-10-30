@@ -21,12 +21,18 @@ class MaquinariaController extends Controller
 	public function index(Request $request)
     {
 		$ide=Auth::user()->idempresa;
+			$rol=DB::table('roles')-> select('crearmaquinaria')->where('iduser','=',$request->user()->id)->first();
 		   $query=trim($request->get('searchText'));
 		$data=DB::table('depmaquina')->where('nombre','LIKE','%'.$query.'%')
 			-> where('idempresa','=',$ide)
             ->orderBy('nombre','asc')
             ->paginate(10);
-		return view("produccion.maquina.index",["data"=>$data,"searchText"=>$query]);
+			  	 if($rol->crearmaquinaria){
+     	return view("produccion.maquina.index",["data"=>$data,"searchText"=>$query]);
+		}else{
+			return view('reportes.mensajes.noautorizado');	
+		 }
+	
 		
 	}
 	public function create()

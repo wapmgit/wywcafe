@@ -25,7 +25,7 @@ class ProduccionController extends Controller
         if ($request)
         {
 				$ide=Auth::user()->idempresa;
-			$rol=DB::table('roles')-> select('metae')->where('iduser','=',$request->user()->id)->first();
+			$rol=DB::table('roles')-> select('creartostado')->where('iduser','=',$request->user()->id)->first();
 			$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
             $query=trim($request->get('searchText'));
             $data=DB::table('ptostado as t')
@@ -33,7 +33,7 @@ class ProduccionController extends Controller
             -> where ('to.nombre','LIKE','%'.$query.'%')  
 			->orderBy('idt','desc')
             ->paginate(20);
-    	 if($rol->metae){
+    	 if($rol->creartostado){
      return view ('produccion.tostado.index',["data"=>$data,"searchText"=>$query,"empresa"=>$empresa]);
 		}else{
 			return view('reportes.mensajes.noautorizado');	
@@ -267,6 +267,7 @@ class ProduccionController extends Controller
     }
 	public function dettostado($id)
     {
+		
     	 $det=DB::table('ptostado as pt')
 		 ->join('articulo as art','art.idarticulo','=','pt.idmprima')
 		 ->join('articulo as arts','arts.idarticulo','=','pt.idproducto')
@@ -283,14 +284,14 @@ class ProduccionController extends Controller
         if ($request)
         {
 			$ide=Auth::user()->idempresa;
-			$rol=DB::table('roles')-> select('metae')->where('iduser','=',$request->user()->id)->first();
+			$rol=DB::table('roles')-> select('crearmolida')->where('iduser','=',$request->user()->id)->first();
 			$empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
             $query=trim($request->get('searchText'));
             $data=DB::table('produccion as t')
             -> where ('t.responsable','LIKE','%'.$query.'%')  
 			->orderBy('idproduccion','desc')
             ->paginate(20);
-    	 if($rol->metae){
+    	 if($rol->crearmolida){
      return view ('produccion.molida.index',["data"=>$data,"searchText"=>$query,"empresa"=>$empresa]);
 		}else{
 			return view('reportes.mensajes.noautorizado');	

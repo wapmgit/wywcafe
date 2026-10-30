@@ -25,6 +25,7 @@ role="dialog" tabindex="-1" id="roles{{$q->id}}">
 							<li class="active">
 							<a href="#tab_1{{$q->id}}" data-toggle="tab">Archivo</a></li>
 							<li><a href="#tab_2{{$q->id}}" data-toggle="tab">Ingresos y Egresos</a></li>
+							<li><a href="#tab_2A{{$q->id}}" data-toggle="tab">Produccion</a></li>
 							<li><a href="#tab_3{{$q->id}}" data-toggle="tab">Informes</a></li>
 							<li><a href="#tab_4{{$q->id}}" data-toggle="tab">Caja</a></li>
 							<li><a href="#tab_5{{$q->id}}" data-toggle="tab">Comisiones y Metas</a></li>
@@ -109,7 +110,7 @@ role="dialog" tabindex="-1" id="roles{{$q->id}}">
 					</div>
 				</div>
 							</div>
-							<div class="tab-pane" id="tab_2{{$q->id}}">
+			<div class="tab-pane" id="tab_2{{$q->id}}">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					 <div class="form-group">
 					 <label>Crear Compras: </label><label>
@@ -256,7 +257,38 @@ role="dialog" tabindex="-1" id="roles{{$q->id}}">
 					</div>
 				</div>
 							</div>
-
+				<div class="tab-pane" id="tab_2A{{$q->id}}">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+						 <div class="form-group">
+						 <label>Crear Produccion: </label><label>
+						  <input type="checkbox" name="op61" class="minimal" @if($q->creartostado==1) checked @endif ></label>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+						 <div class="form-group">
+						 <label>Crear Molida/Empaquetada: </label><label>
+						  <input type="checkbox" name="op62" class="minimal" @if($q->crearmolida==1) checked @endif ></label>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+						 <div class="form-group">
+						 <label>Reporte Produccion: </label><label>
+						  <input type="checkbox" name="op63" class="minimal" @if($q->reproduccion==1) checked @endif ></label>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+						 <div class="form-group">
+						 <label>Crear Tostador: </label><label>
+						  <input type="checkbox" name="op64" class="minimal" @if($q->creartostador==1) checked @endif ></label>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+						 <div class="form-group">
+						 <label>Crear Maquinaria: </label><label>
+						  <input type="checkbox" name="op65" class="minimal" @if($q->crearmaquinaria==1) checked @endif ></label>
+						</div>
+					</div>
+				</div>
 			<div class="tab-pane" id="tab_3{{$q->id}}">
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="form-group">

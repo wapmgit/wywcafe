@@ -1793,6 +1793,7 @@ return view('reportes.detallecobranza.index',["nombre"=>$nombre,"vendedor"=>$ven
     {
 		//dd($request);
 		$ide=Auth::user()->idempresa;
+		$rol=DB::table('roles')-> select('reproduccion')->where('iduser','=',$request->user()->id)->first();
 		$corteHoy = date("Y-m-d");
         $empresa=DB::table('empresa')-> where('idempresa','=',$ide)->first();
 		$tipo=$request->get('tipodoc');
@@ -1824,6 +1825,11 @@ return view('reportes.detallecobranza.index',["nombre"=>$nombre,"vendedor"=>$ven
             ->whereBetween('pt.fecha', [$query, $query2])
             ->get(); //dd($detalle);
 		$query2=date("Y-m-d",strtotime($query2."- 1 days"));
-        return view('reportes.produccion.index',["detalle"=>$detalle,"datos"=>$datost,"datosp"=>$datosp,"empresa"=>$empresa,"searchText"=>$query,"searchText2"=>$query2]);    
+			  	 if($rol->reproduccion){
+		 return view('reportes.produccion.index',["detalle"=>$detalle,"datos"=>$datost,"datosp"=>$datosp,"empresa"=>$empresa,"searchText"=>$query,"searchText2"=>$query2]);    
+		}else{
+			return view('reportes.mensajes.noautorizado');	
+		 }
+       
     }
 }

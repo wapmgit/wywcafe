@@ -21,12 +21,18 @@ class TostadorController extends Controller
     public function index(Request $request)
     {
 		$ide=Auth::user()->idempresa;
-		   $query=trim($request->get('searchText'));
+		$rol=DB::table('roles')-> select('creartostador')->where('iduser','=',$request->user()->id)->first();
+		 $query=trim($request->get('searchText'));
 		$personas=DB::table('tostador')->where('nombre','LIKE','%'.$query.'%')
 			-> where('idempresa','=',$ide)
             ->orderBy('nombre','asc')
             ->paginate(10);
+			  	 if($rol->creartostador){
 		return view("produccion.tostador.index",["personas"=>$personas,"searchText"=>$query]);
+		}else{
+			return view('reportes.mensajes.noautorizado');	
+		 }
+
 		
 	}
 	public function create()

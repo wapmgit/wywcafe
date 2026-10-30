@@ -135,6 +135,11 @@ class SistemaController extends Controller
 		if ($request->get('op58')){ $data->rinventario=1; }else{$data->rinventario=0; }       
 		if ($request->get('op59')){ $data->cambiarprecioventa=1; }else{$data->cambiarprecioventa=0; }       
 		if ($request->get('op60')){ $data->editarprecioventa=1; }else{$data->editarprecioventa=0; }       
+		if ($request->get('op61')){ $data->creartostado=1; }else{$data->creartostado=0; }       
+		if ($request->get('op62')){ $data->crearmolida=1; }else{$data->crearmolida=0; }       
+		if ($request->get('op63')){ $data->reproduccion=1; }else{$data->reproduccion=0; }       
+		if ($request->get('op64')){ $data->creartostador=1; }else{$data->creartostador=0; }       
+		if ($request->get('op65')){ $data->crearmaquinaria=1; }else{$data->crearmaquinaria=0; }       
 		$data ->update();
 
 	
