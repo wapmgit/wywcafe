@@ -155,6 +155,7 @@ Route::resource('reportes/utilidad','ReportesController@utilidad');
 Route::resource('reportes/kardex','ArticuloController@kardex');
 Route::resource('reportes/corte','ReportesController@corte');
 Route::resource('reportes/cortecaja','ReportesController@cortecaja');
+Route::resource('reportes/depositocaja','ReportesController@depositocaja');
 Route::resource('reportes/ventasarticulo','ReportesController@ventasarticulo');
 Route::resource('reportes/comprasarticulo','ReportesController@comprasarticulo');
 Route::resource('reportes/catalogo','ArticuloController@catalogo');

@@ -1485,7 +1485,22 @@ return view('reportes.rutasvacio.index',["rutas"=>$rutas,"mov"=>$mov,"datos"=>$d
 
 return view('reportes.ruta.cuentavacios',["mov"=>$mov,"empresa"=>$empresa]);
 	}
-	
+	public function depositocaja(Request $request)
+{ 
+		$idvende=Auth::user()->vendedor;
+		$depvend=DB::table('depvendedor')->select('id_deposito')->where('idvendedor','=',$idvende)->first();
+			$articulos=DB::table('articulo as a')
+            -> join('existencia as ex','a.idarticulo','=','ex.idarticulo')
+			-> join('categoria as c','a.idcategoria','=','c.idcategoria')
+            -> select ('a.idarticulo','a.nombre','a.codigo','a.costo','a.precio1','ex.existencia as stock','c.nombre as categoria','a.descripcion','a.estado','a.pesogr')
+            ->where ('ex.id_almacen','=',$depvend->id_deposito)
+            ->where ('a.estado','=','Activo')
+            ->orderBy('a.nombre','asc')
+            ->get();
+		
+		$deposito=DB::table('depvendedor')-> where('idvendedor','=',$idvende)->first();
+return view('ventas.venta.depositocaja',["articulos"=>$articulos,"deposito"=>$deposito]);
+	}
 	public function csectores(Request $request)
 	{	
 		$ide=Auth::user()->idempresa;

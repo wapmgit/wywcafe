@@ -84,14 +84,17 @@
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
-                  <div class="col-xs-4 text-center">
+                  <div class="col-xs-3 text-center">
                     <a href="/reportes/cortecaja">C. Caja</a>
                   </div>
-				     <div class="col-xs-4 text-center">
+				     <div class="col-xs-3 text-center">
                     <a href="/ventas/venta/create">Facturar</a>
                   </div>
-                  <div class="col-xs-4 text-center">
+                  <div class="col-xs-3 text-center">
                     <a href="/ventas/ventacaja">Ventas</a>
+                  </div>
+				     <div class="col-xs-3 text-center">
+                    <a href="/reportes/depositocaja">Stock</a>
                   </div>
                 </div>
                 <!-- /.row -->
