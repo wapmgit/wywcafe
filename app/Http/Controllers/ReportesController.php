@@ -253,10 +253,20 @@ class ReportesController extends Controller
             ->whereBetween('d.fecha', [$query, $query2])
             ->get();
 		 } 
-		// dd($vendedores);
+			$kilos=DB::table('venta as v')
+			-> join ('detalle_venta as dv','dv.idventa','=','v.idventa')
+			-> join ('articulo as art','art.idarticulo','=','dv.idarticulo')
+			->select('v.idventa',DB::raw('sum(((dv.cntgrp*dv.cantidad)*art.pesogr)/1000) as kgr'))			
+			->where('v.idempresa','=',$ide)
+			->where('v.devolu',$c,$v)
+			->where('v.tipo_comprobante',$cp,$vp)
+			-> whereBetween($opcfecha, [$query, $query2])
+			-> groupby('v.idventa')
+            ->get();
+			
 		 $rutas=DB::table('rutas')->where('idempresa','=',$ide)->get();
 			 if($rol->rventas==1){
-        return view('reportes.ventas.index',["rutas"=>$rutas,"fechafiltro"=>$opcfecha,"vende"=>$vende,"datos"=>$datos,"devolucion"=>$devolucion,"empresa"=>$empresa,"pagos"=>$pagos,"vendedores"=>$vendedores,"searchText"=>$query,"searchText2"=>$query2]);
+        return view('reportes.ventas.index',["rutas"=>$rutas,"kilos"=>$kilos,"fechafiltro"=>$opcfecha,"vende"=>$vende,"datos"=>$datos,"devolucion"=>$devolucion,"empresa"=>$empresa,"pagos"=>$pagos,"vendedores"=>$vendedores,"searchText"=>$query,"searchText2"=>$query2]);
 		 }else{
 			return view('reportes.mensajes.noautorizado');	
 		 }

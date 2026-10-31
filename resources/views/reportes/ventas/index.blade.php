@@ -84,10 +84,11 @@ if($fechafiltro=="v.fechahora"){$filtro="Emision";}else{$filtro="Despacho";}
 		  <!-- <th>Direccion </th> -->
           <th>Doc.</th>
           <th>Condicion</th>
+          <th>Peso(Kg)</th>
           <th>Monto</th>
           <th>Saldo</th>
         </thead>
-        <?php $ctra= 0; $cche=0; $acums=0;  $acumfac=$acumnot=0; $mret=0; $cdeb=0; $credito=0; $contado=0;  $acumdevolu=0; $count=0;?>
+        <?php $ctra= 0; $cche=0; $acums=0; $acumpeso=0; $acumfac=$acumnot=0; $mret=0; $cdeb=0; $credito=0; $contado=0;  $acumdevolu=0; $count=0;?>
 
                @foreach ($datos as $q)
                <?php $count++;
@@ -105,6 +106,7 @@ if ($q->forma==0){$acumnot=($acumnot+$q->total_venta);}else{$acumfac=($acumfac+$
 		   <!--<td><small><small>{{ $q->direccion}}</small></small></td>-->
           <td><small><?php if ($q->forma==0){ echo "NOT";}else{ echo "FAC";}?>-{{ $q->num_comprobante}} <?php if ($q->devolu>0){ echo "- Devuelta";}?></small></td>       
           <td><small>{{ $q->estado}}</small></td>       
+          <td>@php foreach($kilos as $k) if($q->idventa==$k->idventa){ $acumpeso=$acumpeso+$k->kgr;  echo $k->kgr;} @endphp</td>       
 		  <td><small><?php $acum=$acum+ $q->total_venta; echo number_format($q->total_venta, 2,',','.'); ?></small></td>
 		  <td><small><?php $acums=$acums+ $q->saldo; echo number_format($q->saldo, 2,',','.'); ?></small></td>
         </tr>
@@ -114,6 +116,7 @@ if ($q->forma==0){$acumnot=($acumnot+$q->total_venta);}else{$acumfac=($acumfac+$
         <td colspan="2"> <strong>TOTAL:</strong></td>
         <td colspan="2"> <strong>FAC: <?php echo number_format($acumfac, 2,',','.')." $"; ?></strong></td>
         <td colspan="2"> <strong>NOT: <?php echo number_format($acumnot, 2,',','.')." $"; ?></strong></td>
+        <td > <strong><?php echo number_format($acumpeso, 2,',','.')." Kg"; ?></strong></td>
           <td><strong><?php echo number_format($acum, 2,',','.')." $"; ?></strong></td>
 			<td><strong><?php echo number_format($acums, 2,',','.')." $"; ?></strong></td>
           <td ></td>

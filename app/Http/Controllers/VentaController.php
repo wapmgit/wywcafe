@@ -163,7 +163,7 @@ $articulos = $q1->union($q2)->get();
 	 $modo=DB::table('empresa')->select('modop')-> where('idempresa','=',$ide)->first();
 	
 		$user=Auth::user()->name;
-		$nivel=Auth::user()->nivel;
+		$nivel=Auth::user()->nivel; dd($user);
  /* try{
   DB::beginTransaction();*/
    $contador=DB::table('venta')->select(DB::raw('count(num_comprobante) as idventa'))-> where('idempresa','=',$ide)->limit('1')->orderby('idventa','desc')->first();
