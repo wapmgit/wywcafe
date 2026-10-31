@@ -199,6 +199,9 @@ $articulos = $q1->union($q2)->get();
     $venta->diascre=0;
     $venta->comision=0;
 	$venta->montocomision=0;
+		if ($request->has('divisas')) {
+			$venta->pdivisa = 1;
+		}	
 	$venta->user=$user;	
    $venta-> save();
   // dd($venta);
@@ -364,7 +367,9 @@ catch(\Exception $e)
 			if($request->get('formato')=="on"){
 			$venta->formato=1;}else{	$venta->formato=0;}
 			}
-		
+	if ($request->has('divisas')) {
+			$venta->pdivisa = 1;
+		}	
 	$venta->tasa=$request->get('tc');
 	$venta->mcosto=$request->get('totalc');
 	$venta->mivaf=$request->get('total_ivaf');

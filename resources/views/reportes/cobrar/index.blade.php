@@ -99,9 +99,10 @@ return $dias;
 								<th>Monto</th>
 								
 							</thead>
-							<?php $total=0; $count=0;  $diascre=0; $p=0; ?>	
-						   @foreach ($pacientes as $cat)<?php $p++; $cntnc=0; ?>
-						
+							<?php $total=0; $count=0;  $acumpdivisa=0; $diascre=0; $p=0; ?>	
+						   @foreach ($pacientes as $cat)<?php $p++; $cntnc=0; $pd=0; 
+						  if($cat->pdivisa==1){  $acumpdivisa=$acumpdivisa+$cat->acumulado; $pd=1; } 
+						  ?>						
 							<tr>
 								<td>{{$cat->serie_comprobante}}-{{$cat->num_comprobante}}</td>
 								<td>{{ $cat->nombre}}
@@ -120,7 +121,8 @@ return $dias;
 								<?php }else { echo $diascre; }
 
 								?></td>
-								<td><?php $count++; $total=$total+$cat->acumulado; echo number_format( $cat->acumulado, 2,',','.')." $"; ?></td>
+								<td><?php $count++; $total=$total+$cat->acumulado; 
+								 echo number_format( $cat->acumulado, 2,',','.')." $"; if($pd==1){ echo "*"; }?></td>
 							</tr>
 							
 							@endforeach
@@ -143,7 +145,11 @@ return $dias;
 </div>
     </div>
 	  <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12" align="center">
-	<tr><td>Documentos: <?php echo $count; ?></td>	 <td colspan="5"></td><td><strong>Total:</strong></td><td><strong><?php echo number_format( ($total+$acummn), 2,',','.')." $"; ?></strong></td>
+	<tr><td>Documentos: <?php echo $count; ?></td>	
+	<td colspan="3"></td>
+	<td><strong>Total:</strong></td>
+	<td><strong><?php echo number_format( ($total+$acummn), 2,',','.')." $"; ?></strong></td>
+	<td><strong>Pago Divisas: <?php echo number_format( ($acumpdivisa), 2,',','.')." $"; ?></strong></td>
 							</tr>
 	  </div>
 <?php } ?>

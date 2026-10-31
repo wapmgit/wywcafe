@@ -357,7 +357,7 @@ return Redirect::to('pacientes/cobrar/'.$idcliente[0]);   }
 			$pacientes=DB::table('venta as v')
 			->join('clientes as c','c.id_cliente','=','v.idcliente')
 			-> join ('vendedores as ve','ve.id_vendedor','=','v.idvendedor')
-			->select('v.saldo as acumulado','v.idventa as tipo_comprobante','serie_comprobante','num_comprobante','v.fecha_emi as fecha_hora','v.user','c.nombre','c.diascre','ve.nombre as vendedor','c.cedula','c.telefono','c.id_cliente')
+			->select('v.saldo as acumulado','v.pdivisa','v.idventa as tipo_comprobante','serie_comprobante','num_comprobante','v.fecha_emi as fecha_hora','v.user','c.nombre','c.diascre','ve.nombre as vendedor','c.cedula','c.telefono','c.id_cliente')
 			->where('v.idempresa','=',$ide)
 			->where('v.saldo','>',0)
 			->where('v.tipo_comprobante','=','FAC')
@@ -366,7 +366,7 @@ return Redirect::to('pacientes/cobrar/'.$idcliente[0]);   }
 
 			$q2=DB::table('notasadm as n')
 			->join('clientes as c','c.id_cliente','=','n.idcliente')
-			->select('n.pendiente as acumulado',DB::raw('CONCAT("N/D","-",n.tipo ) as serie_comprobante'),'idnota as num_comprobante','n.referencia as num_comprobante','n.fecha as fecha_hora','n.usuario as user','c.nombre','n.usuario as vendedor','c.diascre','c.cedula','c.telefono','c.id_cliente')
+			->select('n.pendiente as acumulado',DB::raw('0 as pdivisa'),DB::raw('CONCAT("N/D","-",n.tipo ) as serie_comprobante'),'idnota as num_comprobante','n.referencia as num_comprobante','n.fecha as fecha_hora','n.usuario as user','c.nombre','n.usuario as vendedor','c.diascre','c.cedula','c.telefono','c.id_cliente')
 			->where('n.idempresa','=',$ide)
 			->where('n.tipo','=',1)->where('n.pendiente','>',0);
 			$clientes= $pacientes->union($q2)->get(); 
@@ -387,7 +387,7 @@ return Redirect::to('pacientes/cobrar/'.$idcliente[0]);   }
 				$clientes=DB::table('venta as v')
 			->join('clientes as c','c.id_cliente','=','v.idcliente')
 			->join('vendedores as ve','ve.id_vendedor','=','v.idvendedor')
-			->select('v.saldo as acumulado','v.idventa as tipo_comprobante','serie_comprobante','v.num_comprobante','v.fecha_emi as fecha_hora','v.user','c.nombre','c.diascre','ve.nombre as vendedor','c.cedula','c.telefono','c.id_cliente')
+			->select('v.saldo as acumulado','v.pdivisa','v.idventa as tipo_comprobante','serie_comprobante','v.num_comprobante','v.fecha_emi as fecha_hora','v.user','c.nombre','c.diascre','ve.nombre as vendedor','c.cedula','c.telefono','c.id_cliente')
 			->where('v.idvendedor','=',$request->get('vendedor'))
 			->where('v.idempresa','=',$ide)
 			->where('v.saldo','>',0)

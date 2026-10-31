@@ -298,9 +298,9 @@ $idv=0;
 	
 						</div>
 					  <div class="modal-footer">
-					   	<!--	<div class="col-lg-6 ol-md-6 col-sm-6 col-xs-6" style="display: none" id="cfl">
-							¿ Convertir en Factura ? <input type="checkbox"  name="convertir" />							
-							</div> -->
+					   	<div class="col-lg-6 ol-md-6 col-sm-6 col-xs-6">
+							¿ Pago Divisas ? <input type="checkbox"  name="divisas" />							
+							</div>
 						<div class="col-lg-12 ol-md-12 col-sm-12 col-xs-12" >
 						<button type="button" class="btn btn-danger" id="regresar" data-dismiss="modal">Cancelar</button>
 						<input name="_token" value="{{ csrf_token() }}" type="hidden" ></input>
