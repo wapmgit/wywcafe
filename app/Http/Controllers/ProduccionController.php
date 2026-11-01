@@ -64,7 +64,7 @@ class ProduccionController extends Controller
 			//dd($materia);
         return view("produccion.tostado.create",["maquina"=>$maquina,"materia"=>$materia,"tostador"=>$tostador,"producto"=>$producto]);
     }
-		    public function savetostado (Request $request)
+		   public function savetostado (Request $request)
     {
 		//dd($request);
 		$user=Auth::user()->name;
@@ -290,7 +290,7 @@ class ProduccionController extends Controller
             $data=DB::table('produccion as t')
             -> where ('t.responsable','LIKE','%'.$query.'%')  
 			->orderBy('idproduccion','desc')
-            ->paginate(20);
+            ->paginate(50);
     	 if($rol->crearmolida){
      return view ('produccion.molida.index',["data"=>$data,"searchText"=>$query,"empresa"=>$empresa]);
 		}else{

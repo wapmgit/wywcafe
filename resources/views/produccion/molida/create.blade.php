@@ -100,7 +100,7 @@
 						<input type="hidden" name="idproduccion[]" value="{{$ven->idarticulo}}"class="form-control" value="0">
 					</td>
 					<td width="30"><input type="number" id="cnt<?php echo $cont; ?>" onchange="javascript:abrircalc({{$cont}},{{$ven->pesogr}});" name="produccion[]"  class="form-control" value="0"></td>
-					<td width="30"><input type="number" id="kg<?php echo $cont; ?>" name="kgproduccion[]" step="0.01" class="form-control" value="0"></td>
+					<td width="30"><input type="number" id="kg<?php echo $cont; ?>" onchange="javascript:abrircalcund({{$cont}},{{$ven->pesogr}});"name="kgproduccion[]" step="0.01" class="form-control " value="0"></td>
 				</tr>
 			@endforeach
 				<tr><td>Total Kg Empaquetados</td>
@@ -126,6 +126,7 @@
   @push('scripts')
 <script>
 $(document).ready(function(){
+
 	$("#kgs").on("change",function(){		
 	var kgs=$("#kgs").val();
 		datos= $("#mprima option:selected").text();
@@ -175,6 +176,35 @@ $(document).ready(function(){
 			$('#kgdif').val(kgdif-calc);
 			}
 }
+	function abrircalcund(id,peso){
+
+	var kge=$('#kgemp').val();  
+	var kgdif=$('#kgdif').val();  	
+	var cnt=$('#kg'+id).val();  
+	var calcund=(cnt*(1000/peso));	
+if(cnt==0){
+	var kgregistrados=0;
+	const articulos = {!! json_encode($otros, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) !!};
+	for(var i=1;i<=articulos.length;i++){
+		var kgregistrados=parseFloat(kgregistrados)+parseFloat($('#kg'+i).val()); }
+			$('#cnt'+id).val(0);
+			$('#kgdif').val(kge-kgregistrados);
+			$('#kgemp').val(kgregistrados);
+}else{
+		if(cnt>kgdif){
+			alert('Cantidad Empaquetada no puede ser Mayor a kg Molidos');
+			$('#cnt'+id).val(0);
+			$('#kg'+id).val(0);
+			$('#kgdif').val(kgdif);
+
+		}else{	
+		var acume=parseFloat(kge)+parseFloat(cnt);		
+			$('#cnt'+id).val(calcund);
+			$('#kgemp').val(acume);
+			$('#kgdif').val(kgdif-cnt);
+			}
+		}
+	}
 function conMayusculas(field) {
             field.value = field.value.toUpperCase()
 }
