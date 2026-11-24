@@ -46,19 +46,19 @@
 							<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
 		   <div class="form-group">
             	<label for="descripcion">Kg</label>
-            	<input type="number" name="kgsubidos" id="kgs" required class="form-control">
+            	<input type="number" name="kgsubidos" id="kgs" step="0.01" required class="form-control">
             </div>
             </div>
 		<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
 		   <div class="form-group">
             	<label for="descripcion">Kg Molidos</label>
-            	<input type="number" name="kgtostados" id="kgt" step="0.1" required class="form-control" placeholder="kg">
+            	<input type="number" name="kgtostados" id="kgt" step="0.01" required class="form-control" placeholder="kg">
             </div>
             </div>
 	<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
 		   <div class="form-group">
             	<label for="descripcion">Reduccion</label>
-            	<input type="number" name="reduccion" id="reduccion" readonly class="form-control" value="0">
+            	<input type="number" name="reduccion" id="reduccion"   step="0.01"  readonly class="form-control" value="0">
             </div>
             </div>
 				<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">

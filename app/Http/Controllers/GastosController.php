@@ -47,6 +47,7 @@ class GastosController extends Controller
         return view("gastos.gasto.create",["monedas"=>$monedas,"personas"=>$personas,"empresa"=>$empresa]);
     } 
 	    public function store(Request $request){
+			//dd($request);
 		$ide=Auth::user()->idempresa;
 		$user=Auth::user()->name;
 		  $contador=DB::table('gasto')->select(DB::raw('count(idgasto) as numero'))-> where('idempresa','=',$ide)->limit('1')->orderby('idgasto','desc')->first();
