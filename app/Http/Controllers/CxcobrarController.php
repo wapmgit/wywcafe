@@ -380,6 +380,7 @@ return Redirect::to('pacientes/cobrar/'.$idcliente[0]);   }
 			->where('not.pendiente','=',0)			
 			->groupby('c.id_cliente')
 			->get();
+			//dd($notasnd);
 			$idv=0;
 			}else{
 			$idv=$request->get('vendedor');

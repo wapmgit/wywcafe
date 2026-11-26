@@ -126,9 +126,11 @@ return $dias;
 							</tr>
 							
 							@endforeach
-						@foreach ($notasnd as $nd)
-						<tr>
-						<?php $acummn=$acummn+$nd->tnotas; ?>
+						@foreach ($notasnd as $nd)	
+						<?php
+						if($nd->tnotas > 0 ){
+						$acummn=$acummn+$nd->tnotas; ?>
+						<tr>					
 						<td>N/D-{{$nd->idnota}}</td>
 						<td>{{$nd->nombre}}</td>
 						<td>{{$nd->cedula}}</td>
@@ -138,6 +140,7 @@ return $dias;
 						<td></td>
 						<td><?php echo number_format($nd->tnotas, 2,',','.'); ?></td>
 						</tr> 
+						<?php } ?>
 								@endforeach
 						</table>
 
